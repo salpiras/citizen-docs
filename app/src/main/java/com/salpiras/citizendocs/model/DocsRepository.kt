@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class DocsRepository @Inject constructor(
-  private val localBookDataSource: LocalDocsDataSource
+  private val localDocsDataSource: LocalDocsDataSource
 ) {
 
   fun getDocList() : Flow<List<Document>> = flow {
-    localBookDataSource.getAllDocs().collect {
+    localDocsDataSource.getAllDocs().collect {
       emit(it.toDocumentData())
     }
   }.flowOn(Dispatchers.IO)
