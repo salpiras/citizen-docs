@@ -6,7 +6,7 @@ import java.util.Date
 
 @Entity(tableName = "docs")
 data class EntityDocument(
-  @PrimaryKey(autoGenerate = true) val key: String,
+  @PrimaryKey(autoGenerate = true) val key: Long,
   val title: String,
   val date: Date,
   val path: String
