@@ -51,15 +51,7 @@ fun DocsListView(viewModel: DocsListViewModel) {
   // pass these to the error view?
   val scope = rememberCoroutineScope()
   val snackbarHostState = remember { SnackbarHostState() }
-  val options = remember {
-    GmsDocumentScannerOptions.Builder()
-      .setGalleryImportAllowed(true)
-      .setPageLimit(10)
-      .setResultFormats(RESULT_FORMAT_PDF)  // We might want to have it configurable
-      .setScannerMode(SCANNER_MODE_FULL)
-      .build()
-  }
-  val scanner = remember { GmsDocumentScanning.getClient(options) }
+  val scanner = remember { GmsDocumentScanning.getClient(viewModel.scanOptions) }
   val scannerLauncher =
     rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
       if (result.resultCode == RESULT_OK) {
