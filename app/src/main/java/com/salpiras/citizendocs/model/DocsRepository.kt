@@ -18,6 +18,8 @@ class DocsRepository @Inject constructor(
     }
   }.flowOn(Dispatchers.IO)
 
+  fun addDocument(doc: Document) = localDocsDataSource.addDocument(doc.toEntity())
+
   private fun List<EntityDocument>.toDocumentData() = map {
     it.toDocumentData()
   }
@@ -25,8 +27,18 @@ class DocsRepository @Inject constructor(
   private fun EntityDocument.toDocumentData() =
     Document(
       title = title,
+      path = path,
+      month = month,
+      year = year,
       date = date,
-      path = path
     )
 
+  private fun Document.toEntity() =
+    EntityDocument(
+      title = title,
+      path = path,
+      date = date,
+      month = month,
+      year = year
+      )
 }

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.salpiras.citizendocs.ui.list.DocsListView
 import com.salpiras.citizendocs.ui.list.DocsListViewModel
+import com.salpiras.citizendocs.ui.list.DocsScannerViewModel
 import com.salpiras.citizendocs.ui.theme.CitizenDocsTheme
 
 @Composable
@@ -15,7 +16,8 @@ fun NavigationView() {
   CitizenDocsTheme {
     NavHost(navController = navController, startDestination = "list") {
       composable(route = "list") {
-        DocsListView(hiltViewModel<DocsListViewModel>())
+        DocsListView(hiltViewModel<DocsListViewModel>(),
+          hiltViewModel<DocsScannerViewModel>())
       }
     }
   }

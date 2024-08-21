@@ -8,4 +8,7 @@ class LocalDocsDataSource @Inject constructor(private val docsDao: DocsDao) {
   fun getAllDocs() : Flow<List<EntityDocument>> {
     return docsDao.getAllDocs()
   }
+
+  fun addDocument(doc : EntityDocument) = docsDao.addDocument(doc)
+
 }

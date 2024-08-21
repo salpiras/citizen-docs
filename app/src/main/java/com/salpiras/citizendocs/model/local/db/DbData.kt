@@ -8,7 +8,7 @@ import java.util.Date
 
 @Entity(tableName = "docs")
 data class EntityDocument(
-  @PrimaryKey(autoGenerate = true) val key: Long,
+  @PrimaryKey(autoGenerate = true) val key: Long = 0,
   val title: String,
   val date: Date,
   val month: Month,

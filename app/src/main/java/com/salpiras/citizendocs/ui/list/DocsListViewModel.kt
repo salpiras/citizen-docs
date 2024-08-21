@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.salpiras.citizendocs.model.DocsRepository
 import com.salpiras.citizendocs.model.Document
-import com.salpiras.citizendocs.model.local.DocsScanner
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,14 +22,12 @@ sealed interface UiDocsListState {
 }
 
 @HiltViewModel
-class DocsListViewModel @Inject constructor(private val repo: DocsRepository,
-                                            private val docsScanner: DocsScanner) : ViewModel() {
+class DocsListViewModel @Inject constructor(private val repo: DocsRepository) : ViewModel() {
   private var initializeCalled = false
   private val _uiState : MutableStateFlow<UiDocsListState> =
     MutableStateFlow(UiDocsListState.Empty)
   // immutable externally exposed instance
   val uiState = _uiState.asStateFlow()
-  val scanOptions = docsScanner.options
 
   @MainThread
   fun initialize() {
