@@ -1,7 +1,9 @@
 package com.salpiras.citizendocs.model
 
+import com.salpiras.citizendocs.di.DispatcherIO
 import com.salpiras.citizendocs.model.local.LocalDocsDataSource
 import com.salpiras.citizendocs.model.local.db.EntityDocument
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -9,14 +11,15 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class DocsRepository @Inject constructor(
-  private val localDocsDataSource: LocalDocsDataSource
+  private val localDocsDataSource: LocalDocsDataSource,
+  @DispatcherIO private val dispatcher: CoroutineDispatcher
 ) {
 
   fun getDocList() : Flow<List<Document>> = flow {
     localDocsDataSource.getAllDocs().collect {
       emit(it.toDocumentData())
     }
-  }.flowOn(Dispatchers.IO)
+  }.flowOn(dispatcher)
 
   fun addDocument(doc: Document) = localDocsDataSource.addDocument(doc.toEntity())
 

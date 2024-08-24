@@ -196,7 +196,7 @@ fun DocumentDataViewPartial() {
     )
     // Space them evenly
     // Add Button for save or discard. Row?
-    
+
     if (showDatePicker) {
       DatePickerModalInput(
         onDateSelected = {
