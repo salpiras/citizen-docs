@@ -1,5 +1,6 @@
 package com.salpiras.citizendocs.model
 
+import com.salpiras.citizendocs.DocumentService
 import com.salpiras.citizendocs.di.DispatcherIO
 import com.salpiras.citizendocs.model.local.LocalDocsDataSource
 import com.salpiras.citizendocs.model.local.db.EntityDocument
@@ -7,15 +8,18 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 interface DocsRepository {
   fun getDocList() : Flow<List<Document>>
-  fun addDocument(doc: Document)
+  suspend fun addDocument(doc: Document)
 }
 
 class DocsRepositoryImpl @Inject constructor(
   private val localDocsDataSource: LocalDocsDataSource,
+  private val documentService : DocumentService,
   @DispatcherIO private val dispatcher: CoroutineDispatcher
 ) : DocsRepository {
 
@@ -25,7 +29,10 @@ class DocsRepositoryImpl @Inject constructor(
     }
   }.flowOn(dispatcher)
 
-  override fun addDocument(doc: Document) = localDocsDataSource.addDocument(doc.toEntity())
+  override suspend fun addDocument(doc: Document) = withContext(dispatcher){
+    val savedDocument = documentService.copyDocument(doc)
+    localDocsDataSource.addDocument(savedDocument.toEntity())
+  }
 
   private fun List<EntityDocument>.toDocumentData() = map {
     it.toDocumentData()
@@ -35,8 +42,6 @@ class DocsRepositoryImpl @Inject constructor(
     Document(
       title = title,
       path = path,
-      month = month,
-      year = year,
       date = date,
     )
 
@@ -45,7 +50,5 @@ class DocsRepositoryImpl @Inject constructor(
       title = title,
       path = path,
       date = date,
-      month = month,
-      year = year
       )
 }

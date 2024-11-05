@@ -11,7 +11,5 @@ data class EntityDocument(
   @PrimaryKey(autoGenerate = true) val key: Long = 0,
   val title: String,
   val date: Date,
-  val month: Month,
-  val year: Year,
   val path: String
 )

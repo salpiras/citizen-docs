@@ -4,16 +4,17 @@ plugins {
   alias(libs.plugins.ksp)
   kotlin("kapt")
   alias(libs.plugins.dagger.hilt.android)
+  alias(libs.plugins.compose.compiler)
 }
 
 android {
   namespace = "com.salpiras.citizendocs"
-  compileSdk = 34
+  compileSdk = 35
 
   defaultConfig {
     applicationId = "com.salpiras.citizendocs"
     minSdk = 26
-    targetSdk = 34
+    targetSdk = 35
     versionCode = 1
     versionName = "1.0"
 
@@ -40,7 +41,7 @@ android {
     compose = true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion = "1.5.12"
+    kotlinCompilerExtensionVersion = "1.5.15"
   }
   packaging {
     resources {
@@ -67,6 +68,8 @@ dependencies {
   implementation(libs.hilt.navigation.compose)
   ksp(libs.androidx.room.compiler)
   implementation(libs.androidx.room.ktx)
+  implementation(libs.coil.compose)
+
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)

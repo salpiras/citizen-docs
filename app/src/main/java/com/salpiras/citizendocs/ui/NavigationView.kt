@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.salpiras.citizendocs.ui.list.DocsListView
 import com.salpiras.citizendocs.ui.list.DocsListViewModel
-import com.salpiras.citizendocs.ui.list.DocsScannerViewModel
+import com.salpiras.citizendocs.ui.save.DocsScannerViewModel
 import com.salpiras.citizendocs.ui.theme.CitizenDocsTheme
 
 @Composable
