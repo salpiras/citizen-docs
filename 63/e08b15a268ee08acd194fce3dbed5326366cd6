@@ -1,0 +1,39 @@
+feature/documents/src/test/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsScreenScreenshotTest.kt
+  s_202b59b4ccc642::t_3f710dd45bbb58 28-29
+  s_202b59b4ccc642::t_a95d6f2979d0c6 56-58
+  s_202b59b4ccc642::t_8a8c112a733a47 12
+feature/scan/src/test/kotlin/com/salpiras/citizendocs/feature/scan/SaveDocumentScreenTest.kt
+  s_202b59b4ccc642::t_fcc6c0d674a8af 8-9
+  s_202b59b4ccc642::t_c7d5255738b13e 45-52
+  s_202b59b4ccc642::t_a112ec37eea129 11
+  s_202b59b4ccc642::t_82a31b0d62cf0d 99-100
+  s_202b59b4ccc642::t_7a3d44a483fca6 123
+  s_202b59b4ccc642::t_267a438eba52c4 56,58
+  s_202b59b4ccc642::t_fe9c1843949e62 57
+  s_202b59b4ccc642::t_1d6845c20a3c88 81,90
+  s_202b59b4ccc642::t_17a2aa2958f137 1-7,10,12-44,53-55,59-80,82-89,91-98,101-122,124-127
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/ScreenshotOptions.kt
+  s_202b59b4ccc642::t_075617f77f38f2 1-19
+README.md
+  s_202b59b4ccc642::t_952d5e993aa713 92-101
+feature/scan/src/test/kotlin/com/salpiras/citizendocs/feature/scan/SaveDocumentScreenScreenshotTest.kt
+  s_202b59b4ccc642::t_da5805854d4e07 10
+  s_202b59b4ccc642::t_8dec48e1cc9974 66-69
+  s_202b59b4ccc642::t_298aed40d2332b 39-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "63e08b15a268ee08acd194fce3dbed5326366cd6",
+  "prompts": {},
+  "sessions": {
+    "s_202b59b4ccc642": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af553dbd-aef7-4a36-a111-daa9d2110deb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
