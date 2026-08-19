@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="documents_title">My documents</string>
+    <string name="documents_scan_action">Scan a document</string>
+    <string name="documents_loading">Loading your documents…</string>
+
+    <string name="documents_empty_title">No documents yet</string>
+    <string name="documents_empty_body">Scan a letter, bill or certificate and it will be filed here, ready to find when you need it.</string>
+
+    <string name="documents_error_title">Something went wrong</string>
+    <string name="documents_load_failed">We couldn\'t load your documents. Try again in a moment.</string>
+
+    <string name="documents_rename">Rename</string>
+    <string name="documents_delete">Delete</string>
+    <string name="documents_save">Save</string>
+    <string name="documents_cancel">Cancel</string>
+    <string name="documents_title_label">Document name</string>
+
+    <string name="documents_deleted">Deleted “%1$s”</string>
+    <string name="documents_delete_failed">We couldn\'t delete that document.</string>
+    <string name="documents_rename_failed">We couldn\'t rename that document.</string>
+    <string name="documents_no_pdf_viewer">No app on this device can open PDFs.</string>
+
+    <string name="documents_title_blank">Give the document a name.</string>
+    <string name="documents_title_too_long">Keep the name under %1$d characters.</string>
+
+    <string name="documents_more_options">More options for %1$s</string>
+</resources>
