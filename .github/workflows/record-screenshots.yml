@@ -1,0 +1,53 @@
+name: Record screenshots
+
+# Goldens must be recorded on the same platform that verifies them. CI runs on Linux, so
+# goldens recorded on a developer's macOS machine fail verification: Robolectric's native
+# graphics backend is a per-platform binary and font metrics differ enough to shift layout,
+# which is well beyond any sane pixel tolerance.
+#
+# Run this workflow whenever a UI change makes `verifyRoborazziDebug` fail legitimately.
+# It re-records on Linux and commits the goldens back to the branch.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to record goldens on
+        required: true
+        default: main
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Record goldens
+        run: ./gradlew recordRoborazziDebug
+
+      - name: Commit goldens
+        run: |
+          if git diff --quiet -- '**/src/test/screenshots'; then
+            echo "Goldens already match this platform; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '**/src/test/screenshots'
+          git commit -m "Re-record screenshot goldens on Linux"
+          git push origin HEAD:${{ inputs.branch }}

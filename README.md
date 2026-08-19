@@ -89,6 +89,13 @@ Goldens live beside the code, in `feature/<name>/src/test/screenshots`, and are 
 the normal unit test task. Screenshot tests force `dynamicColor = false`; with Material You
 enabled the palette would follow the host wallpaper and goldens would differ per machine.
 
+**Goldens are recorded on Linux**, because that is what CI verifies on. Robolectric's native
+graphics backend is a per-platform binary and font metrics differ enough between macOS and
+Linux to shift text layout — well beyond any sane pixel tolerance. Recording locally on a Mac
+and pushing will fail CI. After an intentional UI change, re-record through the
+[Record screenshots](.github/workflows/record-screenshots.yml) workflow rather than locally;
+it runs `recordRoborazziDebug` on Linux and commits the result back to your branch.
+
 The rename dialog is covered by behaviour tests and `@PreviewLightDark` previews rather than
 screenshots: `AlertDialog` renders into its own window and, under Robolectric, that window's
 scrim animation never reports idle, so the capture times out.
