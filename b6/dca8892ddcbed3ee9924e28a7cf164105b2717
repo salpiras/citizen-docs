@@ -1,0 +1,21 @@
+.github/workflows/record-screenshots.yml
+  s_202b59b4ccc642::t_3d97d839f80999 1-53
+README.md
+  s_202b59b4ccc642::t_36ec70866ba34e 92-98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "b6dca8892ddcbed3ee9924e28a7cf164105b2717",
+  "prompts": {},
+  "sessions": {
+    "s_202b59b4ccc642": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af553dbd-aef7-4a36-a111-daa9d2110deb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
