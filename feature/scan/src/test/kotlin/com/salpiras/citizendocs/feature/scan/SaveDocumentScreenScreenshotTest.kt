@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.salpiras.citizendocs.core.designsystem.theme.CitizenDocsTheme
+import com.salpiras.citizendocs.core.testing.CitizenDocsRoborazziOptions
 import com.salpiras.citizendocs.core.ui.UiText
 import kotlinx.datetime.LocalDate
 import org.junit.Rule
@@ -35,7 +36,9 @@ class SaveDocumentScreenScreenshotTest {
             }
         }
         composeTestRule.mainClock.advanceTimeBy(SETTLE_MILLIS)
-        composeTestRule.onRoot().captureRoboImage("src/test/screenshots/$name.png")
+        composeTestRule
+            .onRoot()
+            .captureRoboImage("src/test/screenshots/$name.png", CitizenDocsRoborazziOptions)
     }
 
     private fun state(title: String = "Tax return 2025", titleError: UiText? = null, isSaving: Boolean = false) =
@@ -60,8 +63,10 @@ class SaveDocumentScreenScreenshotTest {
         state = state(title = "", titleError = UiText.Res(R.string.scan_title_blank)),
     )
 
-    @Test
-    fun saving_light() = capture("SaveDocumentScreen_saving_light", darkTheme = false, state = state(isSaving = true))
+    // The in-flight saving state is deliberately not screenshotted. Its only visual is a
+    // CircularProgressIndicator, whose rotation phase is not reproducible across machines
+    // even with a frozen test clock — the golden would be a coin flip. SaveDocumentScreenTest
+    // asserts the observable behaviour instead: the Save button is disabled while saving.
 
     private companion object {
         const val SETTLE_MILLIS = 500L

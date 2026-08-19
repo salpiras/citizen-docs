@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.salpiras.citizendocs.core.designsystem.theme.CitizenDocsTheme
 import com.salpiras.citizendocs.core.model.DocumentId
+import com.salpiras.citizendocs.core.testing.CitizenDocsRoborazziOptions
 import com.salpiras.citizendocs.core.ui.DocumentUiModel
 import com.salpiras.citizendocs.core.ui.UiText
 import com.salpiras.citizendocs.feature.documents.DocumentsUiState.Content
@@ -24,7 +25,8 @@ import org.robolectric.annotation.GraphicsMode
  * Goldens live in `src/test/screenshots` next to the code they cover.
  *
  * `dynamicColor = false` is essential: with it on, the palette would follow the host
- * wallpaper and every golden would be machine-dependent.
+ * wallpaper and every golden would be machine-dependent. See [CitizenDocsRoborazziOptions]
+ * for why comparison is not pixel-exact.
  *
  * Record with `./gradlew recordRoborazziDebug`, verify with `./gradlew verifyRoborazziDebug`.
  */
@@ -51,7 +53,9 @@ class DocumentsScreenScreenshotTest {
             CitizenDocsTheme(darkTheme = darkTheme, dynamicColor = false) { content() }
         }
         composeTestRule.mainClock.advanceTimeBy(SETTLE_MILLIS)
-        composeTestRule.onRoot().captureRoboImage("src/test/screenshots/$name.png")
+        composeTestRule
+            .onRoot()
+            .captureRoboImage("src/test/screenshots/$name.png", CitizenDocsRoborazziOptions)
     }
 
     private fun screen(state: DocumentsUiState): @Composable () -> Unit = {
