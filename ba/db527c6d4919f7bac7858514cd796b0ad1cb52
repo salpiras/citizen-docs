@@ -1,0 +1,426 @@
+feature/scan/src/main/kotlin/com/salpiras/citizendocs/feature/scan/SaveDocumentContract.kt
+  s_202b59b4ccc642::t_cfe88c1c2f5788 1-14,16-18,25-27,39-41,47
+  s_202b59b4ccc642::t_17af4d7e154650 15,19-24,28,30,32,34,36,38,42-46
+  s_202b59b4ccc642::t_a288c0ae2a3736 29,31,33,35,37
+build-logic/convention/src/main/kotlin/com/salpiras/citizendocs/KotlinAndroid.kt
+  s_202b59b4ccc642::t_17af4d7e154650 16-33,36,41-46,49,52-55,58-60,62-64,66
+  s_202b59b4ccc642::t_396cb95993bea8 1-15,34-35,37-40,47-48,56
+  s_202b59b4ccc642::t_a288c0ae2a3736 50-51,57,61,65
+core/model/src/main/kotlin/com/salpiras/citizendocs/core/model/FileNames.kt
+  s_202b59b4ccc642::t_4d82875ceb7e22 1-15
+  s_202b59b4ccc642::t_a288c0ae2a3736 17-22
+  s_202b59b4ccc642::t_17af4d7e154650 16
+build-logic/settings.gradle.kts
+  s_202b59b4ccc642::t_17af4d7e154650 2-6,10-18,20-23
+  s_202b59b4ccc642::t_f964dbe6d6a886 1,7-9,19,24-29
+core/database/src/test/kotlin/com/salpiras/citizendocs/core/database/DocumentDaoTest.kt
+  s_202b59b4ccc642::t_8bbffe594dbd6f 15
+  s_202b59b4ccc642::t_17af4d7e154650 24-113
+  s_202b59b4ccc642::t_a288c0ae2a3736 114
+  s_202b59b4ccc642::t_4be6d3f53c9f6f 1-14,16-23,115
+core/data/src/test/kotlin/com/salpiras/citizendocs/core/data/OfflineFirstDocumentsRepositoryTest.kt
+  s_202b59b4ccc642::t_3b25f9ccfd7224 8
+  s_202b59b4ccc642::t_8bbffe594dbd6f 15
+  s_202b59b4ccc642::t_4f855554be2c7d 17
+  s_202b59b4ccc642::t_17af4d7e154650 19-21,23-29,31-37,39-41,43-46,49-51,53-54,57-59,61-62,65-69,71,73-74,77-80,82-84,87-89,91,93-94,97-99,101,103-104,107-109,111-126
+  s_202b59b4ccc642::t_a288c0ae2a3736 47,55,63,75,85,95,105,127
+  s_202b59b4ccc642::t_b4765566da9a51 1-3,5-7,9-14,16,18,22,30,38,42,48,52,56,60,64,70,72,76,81,86,90,92,96,100,102,106,110,128
+  s_202b59b4ccc642::t_58ded5308002b2 4
+core/ui/src/main/kotlin/com/salpiras/citizendocs/core/ui/DocumentUiModel.kt
+  s_202b59b4ccc642::t_17af4d7e154650 17-21,25,27,33
+  s_202b59b4ccc642::t_a288c0ae2a3736 28-32
+  s_202b59b4ccc642::t_acba57a6b77d27 1-16,22-24,26,34-35
+core/model/src/main/kotlin/com/salpiras/citizendocs/core/model/Document.kt
+  s_202b59b4ccc642::t_f9b0d7aa8b6acf 1-3,5-6,8-15,23
+  s_202b59b4ccc642::t_17af4d7e154650 7,16-22
+  s_202b59b4ccc642::t_8bbffe594dbd6f 4
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/FakeDocumentDao.kt
+  s_202b59b4ccc642::t_17af4d7e154650 15,17-18,20,22-23,26-57,59
+  s_202b59b4ccc642::t_1525b5b5828f67 1-14,16,19,21,25,58,60-61
+  s_202b59b4ccc642::t_a288c0ae2a3736 24
+feature/documents/src/main/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsScreen.kt
+  s_202b59b4ccc642::t_fd65fdb755dfbb 31
+  s_202b59b4ccc642::t_a288c0ae2a3736 231-233
+  s_202b59b4ccc642::t_ebfa48bd19e3db 1-4,6-30,32-55,59,64,75-76,83-87,92,112,120,128,136-137,139-142,147,173-176,179,204-208,216-220,228-229
+  s_202b59b4ccc642::t_dd601db0832933 5
+  s_202b59b4ccc642::t_8bbffe594dbd6f 68,71
+  s_202b59b4ccc642::t_17af4d7e154650 56-58,60-63,65-67,69-70,72-74,77-82,88-91,93-111,113-119,121-127,129-135,138,143-146,148-172,177-178,180-203,209-215,221-227,230,234
+build.gradle.kts
+  s_202b59b4ccc642::t_17af4d7e154650 4-13
+  s_202b59b4ccc642::t_9805249a73c6ea 16-27,29-40
+  s_202b59b4ccc642::t_c75b6a1fd38a07 1-2,14-15,28,41
+feature/documents/src/test/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsViewModelTest.kt
+  s_202b59b4ccc642::t_17af4d7e154650 18-26,29-34,37-47,50-52,54-55,57,59-61,64-71,73-77,79-84,87-96,99-111,114-117,119,121-123,126-136,139-153,156-169,171-179,181-182
+  s_202b59b4ccc642::t_f70bbab39427f6 1-17,28,35-36,48-49,53,56,58,62-63,72,78,85-86,97-98,112-113,118,120,125,138,155,180,184
+  s_202b59b4ccc642::t_a288c0ae2a3736 27,124,137,154,170,183
+core/ui/src/main/kotlin/com/salpiras/citizendocs/core/ui/OpenPdf.kt
+  s_202b59b4ccc642::t_dd834d0f79796c 1-18,31
+  s_202b59b4ccc642::t_17af4d7e154650 19-29
+  s_202b59b4ccc642::t_a288c0ae2a3736 30
+core/model/src/test/kotlin/com/salpiras/citizendocs/core/model/DocumentTitleTest.kt
+  s_202b59b4ccc642::t_17af4d7e154650 7-43
+  s_202b59b4ccc642::t_807377fc986f66 1-6,44
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/FixedClock.kt
+  s_202b59b4ccc642::t_2f1134a1e1c75a 1-2,5-6,9,13
+  s_202b59b4ccc642::t_17af4d7e154650 7-8,10-12
+  s_202b59b4ccc642::t_5a7fe7378d892a 3-4
+build-logic/convention/src/main/kotlin/AndroidApplicationConventionPlugin.kt
+  s_202b59b4ccc642::t_17af4d7e154650 11-14,16-21
+  s_202b59b4ccc642::t_5403b45bd101b5 1-10,15,22-23
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/component/CitizenDocsIcons.kt
+  s_202b59b4ccc642::t_6b68ed471f861f 5
+  s_202b59b4ccc642::t_17af4d7e154650 14-20
+  s_202b59b4ccc642::t_8dfb178a90fe19 1-4,6,8-13,21
+  s_202b59b4ccc642::t_a288c0ae2a3736 7
+build-logic/convention/build.gradle.kts
+  s_202b59b4ccc642::t_3a6441f2f0a61f 1-3,5-10,13-15,19-21,28-30,35-37,104-105
+  s_202b59b4ccc642::t_17af4d7e154650 4,11-12,16-18,22-27,31-34,38-103
+core/scanner/src/main/kotlin/com/salpiras/citizendocs/core/scanner/ScanLauncher.kt
+  s_202b59b4ccc642::t_3670d10bb5e0da 1-9,11-24,29,34,47-50
+  s_202b59b4ccc642::t_9ec638995c16b7 10
+  s_202b59b4ccc642::t_17af4d7e154650 25-28,30-33,35-46,51,55
+  s_202b59b4ccc642::t_a288c0ae2a3736 52-54
+feature/scan/src/main/kotlin/com/salpiras/citizendocs/feature/scan/SaveDocumentViewModel.kt
+  s_202b59b4ccc642::t_33a3f50dd1860b 1-15,17-18,30,34,51-52,57,67,80,82
+  s_202b59b4ccc642::t_8bbffe594dbd6f 16,39,42,44,46,48,70,73
+  s_202b59b4ccc642::t_17af4d7e154650 20-21,26-28,32,36-38,40-41,43,45,47,49-50,54-56,58-66,68-69,71-72,74-78,81,83,87
+  s_202b59b4ccc642::t_a288c0ae2a3736 19,22-25,29,31,33,35,53,79,84-86
+core/model/src/test/kotlin/com/salpiras/citizendocs/core/model/FileNamesTest.kt
+  s_202b59b4ccc642::t_17af4d7e154650 7-10,12-15,17-22,24-27,29-33,35-39,41-44
+  s_202b59b4ccc642::t_81e2b0c64abd30 1-6,11,16,23,28,34,40,45
+build-logic/convention/src/main/kotlin/com/salpiras/citizendocs/AndroidCompose.kt
+  s_202b59b4ccc642::t_17af4d7e154650 9-10,12-16,18-20
+  s_202b59b4ccc642::t_0aa0633954e790 1-8,11,17,21-22
+feature/scan/src/test/kotlin/com/salpiras/citizendocs/feature/scan/SaveDocumentViewModelTest.kt
+  s_202b59b4ccc642::t_8bbffe594dbd6f 20
+  s_202b59b4ccc642::t_17af4d7e154650 29-45,48-50,53-56,58-59,61-63,66-68,70,72-73,76-79,81,83,86-89,91,93-94,97-111,114-123
+  s_202b59b4ccc642::t_a288c0ae2a3736 46,51,74,84,95-96
+  s_202b59b4ccc642::t_8027cdec0afe76 1-15,19,21,28,47,52,57,60,64-65,69,71,75,80,82,85,90,92,112-113,124-125
+  s_202b59b4ccc642::t_8674841e4d6622 16-18,22-27
+core/database/build.gradle.kts
+  s_202b59b4ccc642::t_1f056dc294279b 15
+  s_202b59b4ccc642::t_7e4aeaac80f60b 1,5-7,9-11,20
+  s_202b59b4ccc642::t_17af4d7e154650 2-4,8,12-14,16-19
+gradle.properties
+  s_202b59b4ccc642::t_e81c058d7786cd 2-11,14,16,18-26
+  s_202b59b4ccc642::t_87d01592cf6543 12-13
+  s_202b59b4ccc642::t_44f2f5e344af6d 27-29
+build-logic/convention/src/main/kotlin/AndroidRoomConventionPlugin.kt
+  s_202b59b4ccc642::t_17af4d7e154650 11-14,16-18,20-24,26-32
+  s_202b59b4ccc642::t_d81ed714d216ff 1-10,15,19,25,33-34
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DocumentConverters.kt
+  s_202b59b4ccc642::t_17af4d7e154650 13,16,19-20,22-23
+  s_202b59b4ccc642::t_8bbffe594dbd6f 5
+  s_202b59b4ccc642::t_b5a0a00730e559 12,14,17
+  s_202b59b4ccc642::t_a1fded0911f4ab 1-4,6-11,15,18,21,24
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/DocumentFileStore.kt
+  s_202b59b4ccc642::t_17af4d7e154650 11-12,14-15,17,19,21-22,25-26,28-29
+  s_202b59b4ccc642::t_375cff916e5a56 1-10,13,16,18,20,23-24,30
+  s_202b59b4ccc642::t_a288c0ae2a3736 27
+build-logic/convention/src/main/kotlin/AndroidLibraryConventionPlugin.kt
+  s_202b59b4ccc642::t_be38b367aed592 1-6,8-10,12-17,23,31,45-46
+  s_202b59b4ccc642::t_aabe3da5784d1e 7,11
+  s_202b59b4ccc642::t_17af4d7e154650 18-22,24-30,32-36,38-44
+  s_202b59b4ccc642::t_1f471053e1c58e 37
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/component/CitizenDocsTopAppBar.kt
+  s_202b59b4ccc642::t_c58542367c7755 1-13,19,28
+  s_202b59b4ccc642::t_17af4d7e154650 14-18,20-27
+build-logic/convention/src/main/kotlin/HiltConventionPlugin.kt
+  s_202b59b4ccc642::t_50ee888ea09eb9 1-11,15,20,27,35-37
+  s_202b59b4ccc642::t_17af4d7e154650 12-14,16-19,21-26,28-34
+core/scanner/src/main/kotlin/com/salpiras/citizendocs/core/scanner/MlKitDocumentScanner.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 14,17,27,29,32,34,42,44
+  s_202b59b4ccc642::t_17af4d7e154650 15-16,18-26,31,35-40,43,45
+  s_202b59b4ccc642::t_8bbffe594dbd6f 33
+  s_202b59b4ccc642::t_a292b98b7e6f05 1-13,28,30,41
+core/storage/build.gradle.kts
+  s_202b59b4ccc642::t_955e30d7a45da9 1,4-6,8-10,17
+  s_202b59b4ccc642::t_17af4d7e154650 2-3,7,11-13,15-16
+  s_202b59b4ccc642::t_b8823fa69fc268 14
+feature/documents/build.gradle.kts
+  s_202b59b4ccc642::t_17af4d7e154650 2,6
+  s_202b59b4ccc642::t_0cb4ee0203536b 1,3-5,7
+app/src/main/kotlin/com/salpiras/citizendocs/MainActivity.kt
+  s_202b59b4ccc642::t_f45037d5fe1090 1-14,21,26,32-33
+  s_202b59b4ccc642::t_17af4d7e154650 15-20,22-25,27-31
+core/domain/src/test/kotlin/com/salpiras/citizendocs/core/domain/DeleteDocumentUseCaseTest.kt
+  s_202b59b4ccc642::t_17af4d7e154650 11-12,14-16,18,20-21,24-27,29,31-32
+  s_202b59b4ccc642::t_a2920d065cca61 1-10,13,17,19,23,34
+  s_202b59b4ccc642::t_a288c0ae2a3736 22,28,30,33
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DocumentEntity.kt
+  s_202b59b4ccc642::t_8bbffe594dbd6f 10
+  s_202b59b4ccc642::t_17af4d7e154650 13-18,21-27,30,38
+  s_202b59b4ccc642::t_1e7f72b7d56476 1-9,11-12,19-20,28-29
+  s_202b59b4ccc642::t_a288c0ae2a3736 31-37
+core/database/schemas/com.salpiras.citizendocs.core.database.CitizenDocsDatabase/1.json
+  s_202b59b4ccc642::t_3766cf0514108f 1-87
+feature/scan/src/main/kotlin/com/salpiras/citizendocs/feature/scan/SaveDocumentScreen.kt
+  s_202b59b4ccc642::t_8bbffe594dbd6f 51,66,68
+  s_202b59b4ccc642::t_30fa9dc8b4b94d 1-36,38-50,52-54,58,62,72-73,80-84,89,103-104,124,134,148,164-166,174-177,183,203,207-211,224
+  s_202b59b4ccc642::t_fd65fdb755dfbb 37
+  s_202b59b4ccc642::t_17af4d7e154650 55-57,59-61,63-65,67,69-71,74-79,85-88,90-102,105-123,125-133,135-147,149-163,167-173,178-182,184-202,204-206,212-223
+.gitignore
+  s_202b59b4ccc642::t_9c864f52a4c9b9 34-36
+core/ui/src/main/kotlin/com/salpiras/citizendocs/core/ui/UiText.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 26
+  s_202b59b4ccc642::t_17af4d7e154650 17-18,20-21,23-25
+  s_202b59b4ccc642::t_bd81a47a3ff33d 1-16,19,22,27-30
+core/data/src/main/kotlin/com/salpiras/citizendocs/core/data/DataModule.kt
+  s_202b59b4ccc642::t_7cff533dec506a 1-11,15
+  s_202b59b4ccc642::t_17af4d7e154650 12-14
+gradle/libs.versions.toml
+  s_202b59b4ccc642::t_0aff52dc2cebff 64-65
+  s_202b59b4ccc642::t_a3f28e4134e593 45-46
+  s_202b59b4ccc642::t_60765394f48548 82-83
+  s_202b59b4ccc642::t_f45235afff005c 122
+  s_202b59b4ccc642::t_d5e461cbf502cc 19-25
+  s_202b59b4ccc642::t_99c4e6efc52fbc 8
+  s_202b59b4ccc642::t_3753244073d726 2-3,10,13-15,18,26-27,34-35,38,43-44,49-63,66-81,84-115,118-121,123-124,126-128,130-139
+  s_202b59b4ccc642::t_f92d6c7cafb034 36-37,39-42
+  s_202b59b4ccc642::t_502c726eb1a83e 11-12,16
+  s_202b59b4ccc642::t_5e88ce8a81e9a3 4-7,9
+  s_202b59b4ccc642::t_6f1b77a049d8f3 28-33
+  s_202b59b4ccc642::t_6e81e0d9a44508 17
+build-logic/convention/src/main/kotlin/AndroidFeatureConventionPlugin.kt
+  s_202b59b4ccc642::t_17af4d7e154650 16-22,24-29,31-33,35-40,42-44
+  s_202b59b4ccc642::t_58c8815e6a85d0 34
+  s_202b59b4ccc642::t_2e8a5c96e2bcea 1-15,23,30,41,45-46
+core/ui/src/main/kotlin/com/salpiras/citizendocs/core/ui/mvi/ObserveEffects.kt
+  s_202b59b4ccc642::t_09127ae07027b3 1-16,20,25-26
+  s_202b59b4ccc642::t_17af4d7e154650 17-19,21-24
+build-logic/convention/src/main/kotlin/AndroidApplicationComposeConventionPlugin.kt
+  s_202b59b4ccc642::t_17af4d7e154650 9-12,14-15
+  s_202b59b4ccc642::t_213b7f45a8cf77 1-8,13,16-17
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/MainDispatcherRule.kt
+  s_202b59b4ccc642::t_17af4d7e154650 18-21,23-25
+  s_202b59b4ccc642::t_8e52468f7556b3 17
+  s_202b59b4ccc642::t_94ebbe628af249 4
+  s_202b59b4ccc642::t_ef51f354ee6df7 1-3,5-16,22,26
+core/testing/build.gradle.kts
+  s_202b59b4ccc642::t_e3087c78488db0 1,4-6,8-10,23
+  s_202b59b4ccc642::t_17af4d7e154650 2-3,7,11-22
+build-logic/convention/src/main/kotlin/com/salpiras/citizendocs/ProjectExtensions.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 12
+  s_202b59b4ccc642::t_938e2db1b6d7d6 1-9,11
+  s_202b59b4ccc642::t_17af4d7e154650 10
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/InMemoryDocumentFileStore.kt
+  s_202b59b4ccc642::t_17af4d7e154650 11-19,21-46
+  s_202b59b4ccc642::t_bc317a5afd8e1a 1-10,20,47
+feature/scan/src/main/res/values/strings.xml
+  s_202b59b4ccc642::t_5b6454c534730d 1-18
+core/data/src/main/kotlin/com/salpiras/citizendocs/core/data/DocumentsRepository.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 13,15,17,19,21
+  s_202b59b4ccc642::t_5b6dad8f988a8a 1-8,10-11,23
+  s_202b59b4ccc642::t_17af4d7e154650 9,12,14,16,18,20,22
+feature/documents/src/main/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsViewModel.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 26,29-31,33-37,55,57,76,79,81,84,86,98,111,116-118
+  s_202b59b4ccc642::t_9425c61acf9649 1-25,56,74-75,80,85,96-97,112,114
+  s_202b59b4ccc642::t_17af4d7e154650 27-28,32,38-54,58-59,61,63,65,67-68,70,72-73,77-78,82-83,87-95,99-102,104-106,108-110,113,115,119
+  s_202b59b4ccc642::t_8bbffe594dbd6f 60,62,64,66,69,71,103,107
+core/storage/src/main/AndroidManifest.xml
+  s_202b59b4ccc642::t_dde543a2b1f6a2 1-22
+feature/scan/build.gradle.kts
+  s_202b59b4ccc642::t_17af4d7e154650 2,6,10
+  s_202b59b4ccc642::t_058f70c40a7fc2 1,3-5,7-9,11
+core/ui/src/main/res/values/strings.xml
+  s_202b59b4ccc642::t_22d05be1a4d84f 1-7
+settings.gradle.kts
+  s_202b59b4ccc642::t_17af4d7e154650 2-12,17-21
+  s_202b59b4ccc642::t_0139c7cdba7ae0 15,25-27,29-42
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DatabaseModule.kt
+  s_202b59b4ccc642::t_17af4d7e154650 20-27,29-30
+  s_202b59b4ccc642::t_60f50e1af9fb11 1-19,28,31
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/CitizenDocsDatabase.kt
+  s_202b59b4ccc642::t_1f082a6ea2b092 1-12,16-18,20,25
+  s_202b59b4ccc642::t_17af4d7e154650 13-15,19,21-24
+core/domain/src/test/kotlin/com/salpiras/citizendocs/core/domain/RenameDocumentUseCaseTest.kt
+  s_202b59b4ccc642::t_17af4d7e154650 12-13,15-17,19,21-22,25-27,29,31-32,35-38,40,42
+  s_202b59b4ccc642::t_a288c0ae2a3736 23,33,39,41,43
+  s_202b59b4ccc642::t_9c8cab036123c3 1-11,14,18,20,24,28,30,34,44
+app/src/main/AndroidManifest.xml
+  s_202b59b4ccc642::t_312db9c630d501 6,16,20-21,29
+core/common/src/main/kotlin/com/salpiras/citizendocs/core/common/Dispatchers.kt
+  s_202b59b4ccc642::t_b289364643508f 1-18,20-23,27,31
+  s_202b59b4ccc642::t_17af4d7e154650 19,24-26,28-30
+app/src/main/res/values/strings.xml
+  s_202b59b4ccc642::t_fba80999c8fc27 3-4
+build-logic/convention/src/main/kotlin/JvmLibraryConventionPlugin.kt
+  s_202b59b4ccc642::t_17af4d7e154650 15-17,19,21-23,25-30
+  s_202b59b4ccc642::t_598456f371392f 5,8
+  s_202b59b4ccc642::t_236fdf316baee9 24
+  s_202b59b4ccc642::t_24168f00ac324d 1-4,6-7,9-14,18,20,31-32
+core/common/src/main/kotlin/com/salpiras/citizendocs/core/common/TimeModule.kt
+  s_202b59b4ccc642::t_1e0c87ddb71c6f 1-7,9-16,19,22
+  s_202b59b4ccc642::t_8bbffe594dbd6f 8
+  s_202b59b4ccc642::t_17af4d7e154650 17-18,20-21
+core/domain/src/main/kotlin/com/salpiras/citizendocs/core/domain/DeleteDocumentUseCase.kt
+  s_202b59b4ccc642::t_3f30fde4577141 1-7,9,11
+  s_202b59b4ccc642::t_17af4d7e154650 8,10,14-16,18-19,21
+  s_202b59b4ccc642::t_a288c0ae2a3736 12-13,17,20
+core/scanner/src/main/kotlin/com/salpiras/citizendocs/core/scanner/DocumentScanner.kt
+  s_202b59b4ccc642::t_17af4d7e154650 7,10-15,24-26
+  s_202b59b4ccc642::t_e0ecba1fa2a094 1-6,8-9,16-23,27
+core/domain/build.gradle.kts
+  s_202b59b4ccc642::t_17af4d7e154650 5-6,10,14-17,19
+  s_202b59b4ccc642::t_c26a429bd6f244 4,7-8,13,18,20
+  s_202b59b4ccc642::t_2d211a6e712930 1-3,9,11-12
+core/ui/build.gradle.kts
+  s_202b59b4ccc642::t_ef79a03e2ae08a 1,5-7,9-11,20
+  s_202b59b4ccc642::t_17af4d7e154650 2-4,8,12-19
+core/ui/src/main/kotlin/com/salpiras/citizendocs/core/ui/mvi/MviViewModel.kt
+  s_202b59b4ccc642::t_c3baa6635267f2 1-28,32,35,37,39,41,45
+  s_202b59b4ccc642::t_17af4d7e154650 29-31,33-34,36,38,40,42-44
+app/src/main/kotlin/com/salpiras/citizendocs/navigation/CitizenDocsNavHost.kt
+  s_202b59b4ccc642::t_8bbffe594dbd6f 51,54
+  s_202b59b4ccc642::t_17af4d7e154650 36-38,40-42,44-50,52-53,55-57,59-67,69-72
+  s_202b59b4ccc642::t_c2a507b1f04431 1-2,5-9,11-21,23-35,39,43,58,68,73
+  s_202b59b4ccc642::t_8610e69b3207f8 3-4,10,22
+core/scanner/src/main/kotlin/com/salpiras/citizendocs/core/scanner/ScannerModule.kt
+  s_202b59b4ccc642::t_17af4d7e154650 12-14
+  s_202b59b4ccc642::t_71e75e9cd096fd 1-11,15
+feature/documents/src/test/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsScreenScreenshotTest.kt
+  s_202b59b4ccc642::t_706bd8449894fb 7
+  s_202b59b4ccc642::t_a288c0ae2a3736 63,70,84,91,98,105,107-108
+  s_202b59b4ccc642::t_cb07bca6b57a46 77
+  s_202b59b4ccc642::t_a1aec2850da502 35-54,56-62,65-69,72-76,79-83,86-90,93-97,100-104,106,110-117
+  s_202b59b4ccc642::t_8c0abba0fdb1b8 1-6,8-34,55,64,71,78,85,92,99,109,118
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/theme/Theme.kt
+  s_202b59b4ccc642::t_8bbffe594dbd6f 112
+  s_202b59b4ccc642::t_17af4d7e154650 14-50,53-89,100-102,104-109,111,113-114,116-120
+  s_202b59b4ccc642::t_a288c0ae2a3736 13,52
+  s_202b59b4ccc642::t_57d4e706cd6e1d 1-12,51,90-99,103,110,115,121
+core/storage/src/main/res/xml/file_paths.xml
+  s_202b59b4ccc642::t_1725ff2d3d6ceb 1-7
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/theme/Type.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 9
+  s_202b59b4ccc642::t_ad19a76942fbd2 1-8
+  s_202b59b4ccc642::t_17af4d7e154650 10-35
+feature/documents/src/test/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsScreenTest.kt
+  s_202b59b4ccc642::t_17af4d7e154650 33-41,43-53,56,58-60,62-63,65-67,69-71,73-77,79-80,82-84,86,88-89,91-93,95,97-98,100-102,104-106,108-110,112-119,121-123,125-126,128-135,137,139-140
+  s_202b59b4ccc642::t_706bd8449894fb 7
+  s_202b59b4ccc642::t_f5ec6862e3d9f7 1-6,8-32,42,54-55,57,61,64,68,72,78,81,85,87,90,94,96,99,103,107,111,120,124,127,136,138,141
+build-logic/convention/src/main/kotlin/AndroidScreenshotConventionPlugin.kt
+  s_202b59b4ccc642::t_17af4d7e154650 15-17,19-28
+  s_202b59b4ccc642::t_85e04fb373a02c 1-14,18,29-30
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/theme/Color.kt
+  s_202b59b4ccc642::t_5252e1017c0782 1-78
+core/data/build.gradle.kts
+  s_202b59b4ccc642::t_7c462320fcac3e 1,4-6,8-10,17,19
+  s_202b59b4ccc642::t_17af4d7e154650 2-3,7,11-16,18
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/TestDocuments.kt
+  s_202b59b4ccc642::t_17af4d7e154650 13-22,24-33,35-44,46
+  s_202b59b4ccc642::t_9c8ee2942eada2 1-5,7-12,23,34,45,47
+  s_202b59b4ccc642::t_8bbffe594dbd6f 6
+core/storage/src/test/kotlin/com/salpiras/citizendocs/core/storage/LocalDocumentFileStoreTest.kt
+  s_202b59b4ccc642::t_0ddbac0732ef0e 1-5,7-21,23,36,38,44,46,49,53,73,77,79,84,88,91,95,97,102,107,111,115
+  s_202b59b4ccc642::t_a288c0ae2a3736 48,56-57,72,83,90,101,106,114
+  s_202b59b4ccc642::t_c46fe5e1808694 6
+  s_202b59b4ccc642::t_17af4d7e154650 24-35,37,39-43,45,47,50-52,54-55,58-71,74-76,78,80-82,85-87,89,92-94,96,98-100,103-105,108-110,112-113
+  s_202b59b4ccc642::t_075650dcf7d2b9 22
+feature/scan/src/test/kotlin/com/salpiras/citizendocs/feature/scan/SaveDocumentScreenScreenshotTest.kt
+  s_202b59b4ccc642::t_17af4d7e154650 23-24,26-38,41-48,50-51,53-54,56-60,63-64,66-68
+  s_202b59b4ccc642::t_8fee8925d37945 1-5,7-22,25,39-40,49,52,55,62,65,69
+  s_202b59b4ccc642::t_706bd8449894fb 6
+  s_202b59b4ccc642::t_a288c0ae2a3736 61
+core/model/src/main/kotlin/com/salpiras/citizendocs/core/model/DocumentTitle.kt
+  s_202b59b4ccc642::t_17af4d7e154650 10-14,18-26
+  s_202b59b4ccc642::t_f65ff465bc0e4b 1-9,15-17,27-28
+build-logic/convention/src/main/kotlin/AndroidLibraryComposeConventionPlugin.kt
+  s_202b59b4ccc642::t_17af4d7e154650 9-12,14-15
+  s_202b59b4ccc642::t_4a1784db4727ae 1-8,13,16-17
+feature/documents/src/main/res/values/strings.xml
+  s_202b59b4ccc642::t_6ba0a3b4501ebc 1-28
+app/src/main/kotlin/com/salpiras/citizendocs/CitizenDocsApp.kt
+  s_202b59b4ccc642::t_8fd688f38c0655 1-7
+core/domain/src/test/kotlin/com/salpiras/citizendocs/core/domain/SaveScannedDocumentUseCaseTest.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 1-11,14,16,20,23-24,28,30-31,35,38-39,43,46-47,53,55,58-59
+  s_202b59b4ccc642::t_17af4d7e154650 12-13,15,17-19,21-22,25-27,29,32-34,36-37,40-42,44-45,48-52,54,56-57
+core/designsystem/build.gradle.kts
+  s_202b59b4ccc642::t_e466d3986bb090 1,5-7,9-11,15
+  s_202b59b4ccc642::t_17af4d7e154650 2-4,8,12-14
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DocumentDao.kt
+  s_202b59b4ccc642::t_722485a742ea22 1-10,32
+  s_202b59b4ccc642::t_17af4d7e154650 11-31
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/LocalDocumentFileStore.kt
+  s_202b59b4ccc642::t_3d45abd5cd89ed 1-16,76-77,82
+  s_202b59b4ccc642::t_a288c0ae2a3736 17,20-21,23-26,28-29,34,39-40,44-49,51,53,55,57,59,61-69,78
+  s_202b59b4ccc642::t_17af4d7e154650 18-19,22,27,30-33,35-38,41-43,50,52,54,56,58,60,70-75,79-81,83
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/FakeDocumentsRepository.kt
+  s_202b59b4ccc642::t_5a7fe7378d892a 12
+  s_202b59b4ccc642::t_17af4d7e154650 22-34,36-66,69-72,74
+  s_202b59b4ccc642::t_ccc5b8fc730b87 1-11,13-21,35,67-68,73,75
+.editorconfig
+  s_202b59b4ccc642::t_e81dc4fe522b7b 1-9,13-16,18-20,26-27
+  s_202b59b4ccc642::t_c2d1d38a17a986 10-12,17,21-25
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/StorageModule.kt
+  s_202b59b4ccc642::t_17af4d7e154650 12-14
+  s_202b59b4ccc642::t_680281ea2c1032 1-11,15
+feature/documents/src/main/kotlin/com/salpiras/citizendocs/feature/documents/RenameDialog.kt
+  s_202b59b4ccc642::t_b13072bf8ad69c 1-20,46-50,57-61,73
+  s_202b59b4ccc642::t_17af4d7e154650 21-45,51-56,62-72
+.github/workflows/ci.yml
+  s_202b59b4ccc642::t_5fe3d243d01f24 1-51
+core/model/build.gradle.kts
+  s_202b59b4ccc642::t_ac84cbc78638f1 1,3-5,7
+  s_202b59b4ccc642::t_17af4d7e154650 2,6
+core/scanner/src/test/kotlin/com/salpiras/citizendocs/core/scanner/MlKitDocumentScannerTest.kt
+  s_202b59b4ccc642::t_aabfcc4b4f98f6 1-16,18,24,29,35
+  s_202b59b4ccc642::t_17af4d7e154650 17,19-23,25-28,30-34
+README.md
+  s_202b59b4ccc642::t_01e6cdcc22810f 1-13,15-126
+  s_202b59b4ccc642::t_6c0d098bbef17f 14
+  s_202b59b4ccc642::t_5b5df2d4e9e3a8 127-138
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/component/StateViews.kt
+  s_202b59b4ccc642::t_17af4d7e154650 27-40,44-73,77-108,114-116,122-128,134-140
+  s_202b59b4ccc642::t_48dbce6a8a5afe 1-26,41-43,74-76,109-113,117-121,129-133,141
+core/scanner/build.gradle.kts
+  s_202b59b4ccc642::t_22c43493bb2761 1,5-7,9-11,19
+  s_202b59b4ccc642::t_17af4d7e154650 2-4,8,12-15,17-18
+  s_202b59b4ccc642::t_a7bafc2ab6cf4b 16
+core/domain/src/main/kotlin/com/salpiras/citizendocs/core/domain/RenameDocumentUseCase.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 13,16-17
+  s_202b59b4ccc642::t_17af4d7e154650 10,12,14,18-22,24,26-33
+  s_202b59b4ccc642::t_3f05515cca95b3 1-9,11,15
+  s_202b59b4ccc642::t_8bbffe594dbd6f 23,25
+app/build.gradle.kts
+  s_202b59b4ccc642::t_8dc0827693b048 23,51,55
+  s_202b59b4ccc642::t_17af4d7e154650 2-5,9,11-14,17-21,24-27,32-50,52-54
+core/common/build.gradle.kts
+  s_202b59b4ccc642::t_0c9e5919deda76 1,4-6,9
+  s_202b59b4ccc642::t_17af4d7e154650 2-3,7-8
+core/ui/src/main/kotlin/com/salpiras/citizendocs/core/ui/DocumentCard.kt
+  s_202b59b4ccc642::t_e038cdaefad7eb 1-24,29,33,60,62-66,80
+  s_202b59b4ccc642::t_17af4d7e154650 25-28,30-32,34-59,61,67-79
+feature/documents/src/main/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsContract.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 29,31,33,35,37,39
+  s_202b59b4ccc642::t_bc65986ff75487 1-9,24-27,41-44,50
+  s_202b59b4ccc642::t_17af4d7e154650 10-23,28,30,32,34,36,38,40,45-49
+core/data/src/main/kotlin/com/salpiras/citizendocs/core/data/OfflineFirstDocumentsRepository.kt
+  s_202b59b4ccc642::t_a288c0ae2a3736 25,28-31,33-36,39,43-44,57,60,64-68,72-74,77
+  s_202b59b4ccc642::t_17af4d7e154650 26-27,32,37,40,42,45-56,58-59,61,63,69,71,75,78
+  s_202b59b4ccc642::t_7d2b656d1cd0ee 1-16,18-24,38,41,62,70,76
+  s_202b59b4ccc642::t_8bbffe594dbd6f 17
+core/domain/src/main/kotlin/com/salpiras/citizendocs/core/domain/SaveScannedDocumentUseCase.kt
+  s_202b59b4ccc642::t_5c4e1cd2c96c5c 1-11,17-23
+  s_202b59b4ccc642::t_8bbffe594dbd6f 34,36
+  s_202b59b4ccc642::t_a288c0ae2a3736 13,15,24,27,33,35,37,50
+  s_202b59b4ccc642::t_17af4d7e154650 12,14,16,25-26,28-32,38-49,51-52
+gradle/wrapper/gradle-wrapper.properties
+  s_202b59b4ccc642::t_32e0738cc8cc80 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "badb527c6d4919f7bac7858514cd796b0ad1cb52",
+  "prompts": {},
+  "sessions": {
+    "s_202b59b4ccc642": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af553dbd-aef7-4a36-a111-daa9d2110deb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
