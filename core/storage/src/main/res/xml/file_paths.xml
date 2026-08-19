@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Matches DOCUMENTS_DIR in LocalDocumentFileStore. Only this subdirectory is shared. -->
+    <files-path
+        name="documents"
+        path="documents/" />
+</paths>

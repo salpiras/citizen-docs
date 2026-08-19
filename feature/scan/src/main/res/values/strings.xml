@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scan_save_title">Save document</string>
+    <string name="scan_title_label">Document name</string>
+    <string name="scan_date_label">Document date: %1$s</string>
+    <string name="scan_save">Save document</string>
+    <string name="scan_cancel">Cancel</string>
+    <string name="scan_confirm">OK</string>
+
+    <string name="scan_save_failed">We couldn\'t save that document. Nothing was stored.</string>
+    <string name="scan_title_blank">Give the document a name.</string>
+    <string name="scan_title_too_long">Keep the name under %1$d characters.</string>
+
+    <plurals name="scan_pages_scanned">
+        <item quantity="one">%1$d page scanned</item>
+        <item quantity="other">%1$d pages scanned</item>
+    </plurals>
+</resources>
