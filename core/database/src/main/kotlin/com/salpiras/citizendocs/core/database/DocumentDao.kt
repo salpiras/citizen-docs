@@ -11,6 +11,22 @@ interface DocumentDao {
     @Query("SELECT * FROM documents ORDER BY document_date DESC, id DESC")
     fun observeAll(): Flow<List<DocumentEntity>>
 
+    /**
+     * An empty [query] matches everything, so the unfiltered list and the search results come
+     * from the same statement — there is no second code path to keep in step.
+     *
+     * SQLite's LIKE is case-insensitive for ASCII. Accented characters compare exactly, which
+     * is acceptable for titles the user typed themselves and is where FTS would earn its keep.
+     */
+    @Query(
+        """
+        SELECT * FROM documents
+        WHERE :query = '' OR title LIKE '%' || :query || '%'
+        ORDER BY document_date DESC, id DESC
+        """,
+    )
+    fun observeMatching(query: String): Flow<List<DocumentEntity>>
+
     @Query("SELECT * FROM documents WHERE id = :id")
     fun observeById(id: Long): Flow<DocumentEntity?>
 

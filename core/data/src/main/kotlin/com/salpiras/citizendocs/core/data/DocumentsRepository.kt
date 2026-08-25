@@ -9,7 +9,8 @@ import kotlinx.datetime.LocalDate
 data class DocumentDraft(val title: String, val documentDate: LocalDate, val sourceUri: String, val pageCount: Int)
 
 interface DocumentsRepository {
-    fun observeDocuments(): Flow<List<Document>>
+    /** [query] filters on title; empty means everything. */
+    fun observeDocuments(query: String = ""): Flow<List<Document>>
 
     fun observeDocument(id: DocumentId): Flow<Document?>
 
@@ -20,4 +21,10 @@ interface DocumentsRepository {
     suspend fun delete(id: DocumentId)
 
     fun contentUri(document: Document): String
+
+    /**
+     * Writes [documents] into a zip at [destinationUri], foldered by document date. Returns
+     * the number of bytes written.
+     */
+    suspend fun export(documents: List<Document>, destinationUri: String): Long
 }

@@ -19,8 +19,12 @@ class FakeDocumentDao : DocumentDao {
 
     private var nextId = 1L
 
-    override fun observeAll(): Flow<List<DocumentEntity>> = rows.map { list ->
-        list.sortedWith(compareByDescending<DocumentEntity> { it.documentDate }.thenByDescending { it.id })
+    override fun observeAll(): Flow<List<DocumentEntity>> = observeMatching("")
+
+    override fun observeMatching(query: String): Flow<List<DocumentEntity>> = rows.map { list ->
+        list
+            .filter { query.isEmpty() || it.title.contains(query, ignoreCase = true) }
+            .sortedWith(compareByDescending<DocumentEntity> { it.documentDate }.thenByDescending { it.id })
     }
 
     override fun observeById(id: Long): Flow<DocumentEntity?> = rows.map { list -> list.firstOrNull { it.id == id } }

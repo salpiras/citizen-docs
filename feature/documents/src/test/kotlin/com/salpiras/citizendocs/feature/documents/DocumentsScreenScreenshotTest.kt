@@ -8,12 +8,10 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.salpiras.citizendocs.core.designsystem.theme.CitizenDocsTheme
-import com.salpiras.citizendocs.core.model.DocumentId
 import com.salpiras.citizendocs.core.testing.CitizenDocsRoborazziOptions
-import com.salpiras.citizendocs.core.ui.DocumentUiModel
 import com.salpiras.citizendocs.core.ui.UiText
 import com.salpiras.citizendocs.feature.documents.DocumentsUiState.Content
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,20 +35,18 @@ class DocumentsScreenScreenshotTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val documents =
-        persistentListOf(
-            DocumentUiModel(DocumentId(1), "Tax return 2025", "12 Jan 2026", 3, 248_000),
-            DocumentUiModel(DocumentId(2), "Passport", "30 Jun 2025", 1, 96_500),
-            DocumentUiModel(DocumentId(3), "Tenancy agreement", "3 Nov 2024", 12, 1_340_000),
-        )
-
-    private fun capture(name: String, darkTheme: Boolean, content: @Composable () -> Unit) {
-        // Dialog scrims and progress indicators animate forever, so the default auto-advancing
-        // clock never reports idle. Freeze it and step a fixed amount so captures are also
-        // deterministic frame-to-frame.
+    private fun capture(name: String, darkTheme: Boolean, state: DocumentsUiState) {
+        // Progress indicators animate forever, so the default auto-advancing clock never
+        // reports idle. Freeze it and step a fixed amount for frame-to-frame determinism.
         composeTestRule.mainClock.autoAdvance = false
         composeTestRule.setContent {
-            CitizenDocsTheme(darkTheme = darkTheme, dynamicColor = false) { content() }
+            CitizenDocsTheme(darkTheme = darkTheme, dynamicColor = false) {
+                DocumentsScreen(
+                    state = state,
+                    onEvent = {},
+                    snackbarHostState = remember { SnackbarHostState() },
+                )
+            }
         }
         composeTestRule.mainClock.advanceTimeBy(SETTLE_MILLIS)
         composeTestRule
@@ -58,56 +54,66 @@ class DocumentsScreenScreenshotTest {
             .captureRoboImage("src/test/screenshots/$name.png", CitizenDocsRoborazziOptions)
     }
 
-    private fun screen(state: DocumentsUiState): @Composable () -> Unit = {
-        DocumentsScreen(
-            state = state,
-            onEvent = {},
-            snackbarHostState = remember { SnackbarHostState() },
-        )
-    }
+    private fun populated() = DocumentsUiState(content = Content.Documents(previewGroups()))
 
     @Test
     fun empty_light() = capture(
         "DocumentsScreen_empty_light",
         darkTheme = false,
-        content = screen(DocumentsUiState(content = Content.Empty)),
+        state = DocumentsUiState(content = Content.Empty),
     )
 
     @Test
     fun empty_dark() = capture(
         "DocumentsScreen_empty_dark",
         darkTheme = true,
-        content = screen(DocumentsUiState(content = Content.Empty)),
+        state = DocumentsUiState(content = Content.Empty),
     )
 
     @Test
-    fun populated_light() = capture(
-        "DocumentsScreen_populated_light",
+    fun grouped_light() = capture("DocumentsScreen_grouped_light", darkTheme = false, state = populated())
+
+    @Test
+    fun grouped_dark() = capture("DocumentsScreen_grouped_dark", darkTheme = true, state = populated())
+
+    @Test
+    fun collapsedGroup_light() = capture(
+        "DocumentsScreen_collapsedGroup_light",
         darkTheme = false,
-        content = screen(DocumentsUiState(content = Content.Documents(documents))),
+        state = populated().copy(collapsedGroups = persistentSetOf("2025-06")),
     )
 
     @Test
-    fun populated_dark() = capture(
-        "DocumentsScreen_populated_dark",
-        darkTheme = true,
-        content = screen(DocumentsUiState(content = Content.Documents(documents))),
+    fun searchActive_light() = capture(
+        "DocumentsScreen_searchActive_light",
+        darkTheme = false,
+        state = populated().copy(isSearchActive = true, searchQuery = "tax"),
+    )
+
+    @Test
+    fun noResults_light() = capture(
+        "DocumentsScreen_noResults_light",
+        darkTheme = false,
+        state = DocumentsUiState(
+            content = Content.NoResults("mortgage"),
+            isSearchActive = true,
+            searchQuery = "mortgage",
+        ),
     )
 
     @Test
     fun loading_light() = capture(
         "DocumentsScreen_loading_light",
         darkTheme = false,
-        content = screen(DocumentsUiState(content = Content.Loading)),
+        state = DocumentsUiState(content = Content.Loading),
     )
 
     @Test
     fun error_light() = capture(
         "DocumentsScreen_error_light",
         darkTheme = false,
-        content =
-        screen(
-            DocumentsUiState(content = Content.Error(UiText.Res(R.string.documents_load_failed))),
+        state = DocumentsUiState(
+            content = Content.Error(UiText.Res(R.string.documents_load_failed)),
         ),
     )
 
@@ -115,6 +121,8 @@ class DocumentsScreenScreenshotTest {
     // window, and under Robolectric that window's scrim animation never reports idle, so the
     // capture times out regardless of the test clock settings. The dialog is covered instead
     // by DocumentsScreenTest (behaviour) and the @PreviewLightDark previews in RenameDialog.kt.
+    //
+    // The exporting state is likewise behaviour-tested rather than screenshotted.
 
     private companion object {
         const val SETTLE_MILLIS = 500L

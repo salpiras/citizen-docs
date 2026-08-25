@@ -8,11 +8,14 @@ import com.salpiras.citizendocs.core.database.asExternalModel
 import com.salpiras.citizendocs.core.model.Document
 import com.salpiras.citizendocs.core.model.DocumentId
 import com.salpiras.citizendocs.core.model.slugify
+import com.salpiras.citizendocs.core.storage.ArchiveEntry
+import com.salpiras.citizendocs.core.storage.DocumentArchiver
 import com.salpiras.citizendocs.core.storage.DocumentFileStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.toJavaLocalDate
 import javax.inject.Inject
 import kotlin.time.Clock
 
@@ -27,14 +30,15 @@ internal class OfflineFirstDocumentsRepository
 constructor(
     private val dao: DocumentDao,
     private val fileStore: DocumentFileStore,
+    private val archiver: DocumentArchiver,
     private val clock: Clock,
     @param:Dispatcher(CitizenDispatcher.IO) private val io: CoroutineDispatcher,
 ) : DocumentsRepository {
     // No flowOn here: Room already runs its queries on its own executor and emits off the
     // main thread. The old repository wrapped this in flow { collect { emit } } as well,
     // which added an operator that did nothing.
-    override fun observeDocuments(): Flow<List<Document>> =
-        dao.observeAll().map { entities -> entities.map(DocumentEntity::asExternalModel) }
+    override fun observeDocuments(query: String): Flow<List<Document>> =
+        dao.observeMatching(query).map { entities -> entities.map(DocumentEntity::asExternalModel) }
 
     override fun observeDocument(id: DocumentId): Flow<Document?> =
         dao.observeById(id.value).map { it?.asExternalModel() }
@@ -75,4 +79,21 @@ constructor(
     }
 
     override fun contentUri(document: Document): String = fileStore.contentUri(document.fileName)
+
+    override suspend fun export(documents: List<Document>, destinationUri: String): Long = withContext(io) {
+        archiver.writeZip(destinationUri, documents.map(Document::asArchiveEntry))
+    }
+}
+
+/**
+ * Folders the archive by document date — "2026/01/Tax_return_2025.pdf" — mirroring the month
+ * sections the list shows. The store guarantees globally unique file names, so entries cannot
+ * collide inside a month.
+ */
+private fun Document.asArchiveEntry(): ArchiveEntry {
+    val date = documentDate.toJavaLocalDate()
+    return ArchiveEntry(
+        pathInZip = "%04d/%02d/%s".format(date.year, date.monthValue, fileName),
+        fileName = fileName,
+    )
 }

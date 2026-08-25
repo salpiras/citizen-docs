@@ -67,17 +67,15 @@ constructor(
      * FileAlreadyExistsException the second time.
      */
     private fun File.uniqueFile(stem: String): File {
-        var candidate = File(this, "$stem.$EXTENSION")
+        var candidate = File(this, "$stem.$PDF_EXTENSION")
         var counter = 1
         while (candidate.exists()) {
-            candidate = File(this, "${stem}_${counter++}.$EXTENSION")
+            candidate = File(this, "${stem}_${counter++}.$PDF_EXTENSION")
         }
         return candidate
     }
 
     private companion object {
-        const val DOCUMENTS_DIR = "documents"
-        const val EXTENSION = "pdf"
         const val AUTHORITY_SUFFIX = ".fileprovider"
     }
 }

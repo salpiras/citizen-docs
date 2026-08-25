@@ -105,6 +105,49 @@ class DocumentDaoTest {
     }
 
     @Test
+    fun `an empty search query matches everything`() = runTest {
+        dao.insert(entity("Tax return 2025", "a.pdf"))
+        dao.insert(entity("Passport", "b.pdf"))
+
+        assertThat(dao.observeMatching("").first()).hasSize(2)
+    }
+
+    @Test
+    fun `search matches a substring anywhere in the title`() = runTest {
+        dao.insert(entity("Tax return 2025", "a.pdf"))
+        dao.insert(entity("Passport", "b.pdf"))
+
+        assertThat(dao.observeMatching("return").first().map { it.title })
+            .containsExactly("Tax return 2025")
+    }
+
+    @Test
+    fun `search ignores case`() = runTest {
+        dao.insert(entity("Tax return 2025", "a.pdf"))
+
+        assertThat(dao.observeMatching("TAX").first()).hasSize(1)
+        assertThat(dao.observeMatching("tax").first()).hasSize(1)
+    }
+
+    @Test
+    fun `search with no match is empty`() = runTest {
+        dao.insert(entity("Tax return 2025", "a.pdf"))
+
+        assertThat(dao.observeMatching("mortgage").first()).isEmpty()
+    }
+
+    @Test
+    fun `search keeps the date ordering`() = runTest {
+        dao.insert(entity("Tax return 2024", "a.pdf", LocalDate(2024, 1, 1)))
+        dao.insert(entity("Tax return 2026", "b.pdf", LocalDate(2026, 1, 1)))
+        dao.insert(entity("Tax return 2025", "c.pdf", LocalDate(2025, 1, 1)))
+
+        assertThat(dao.observeMatching("Tax").first().map { it.title })
+            .containsExactly("Tax return 2026", "Tax return 2025", "Tax return 2024")
+            .inOrder()
+    }
+
+    @Test
     fun `observeAll emits again when a row is inserted`() = runTest {
         assertThat(dao.observeAll().first()).isEmpty()
 
