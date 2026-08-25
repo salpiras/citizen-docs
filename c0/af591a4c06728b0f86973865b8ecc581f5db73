@@ -1,0 +1,109 @@
+core/data/src/main/kotlin/com/salpiras/citizendocs/core/data/DocumentsRepository.kt
+  s_202b59b4ccc642::t_1f28e38401e5a0 24-29
+  s_202b59b4ccc642::t_9af8550f9da92f 12-13
+feature/documents/src/main/res/values/strings.xml
+  s_202b59b4ccc642::t_ac28131a9b3d19 29-51
+  s_202b59b4ccc642::t_9f81262823e03d 28
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/component/CitizenDocsIcons.kt
+  s_202b59b4ccc642::t_a9540009065bc4 4,11-13,15,26-30
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/FakeDocumentsRepository.kt
+  s_202b59b4ccc642::t_aae4023b0ae732 79-94
+  s_202b59b4ccc642::t_2f642b658bd618 39-43
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/RecordingDocumentArchiver.kt
+  s_202b59b4ccc642::t_0e7872ce6575a3 1-28
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/StorageModule.kt
+  s_202b59b4ccc642::t_d1c2368fce42a8 15-18
+core/database/src/test/kotlin/com/salpiras/citizendocs/core/database/DocumentDaoTest.kt
+  s_202b59b4ccc642::t_82cc757afd49c5 107-149
+core/data/src/main/kotlin/com/salpiras/citizendocs/core/data/OfflineFirstDocumentsRepository.kt
+  s_202b59b4ccc642::t_fd0dfa3f1d3728 18
+  s_202b59b4ccc642::t_e7aff22c7d326e 93-98
+  s_202b59b4ccc642::t_37dbbe82fcfe8d 87-92
+  s_202b59b4ccc642::t_104415a9863d5c 82
+  s_202b59b4ccc642::t_111245acc6cf33 40-41
+  s_202b59b4ccc642::t_d23824c20977cd 83-85
+  s_202b59b4ccc642::t_53141005f62f16 11-12
+  s_202b59b4ccc642::t_67044e1c5204bf 33
+  s_202b59b4ccc642::t_3439fa61c5d57e 86
+feature/documents/src/test/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsViewModelTest.kt
+  s_202b59b4ccc642::t_db6699f633e723 6,9,15,17,21,35-37,40-43,55-56,58-60,64-65,67,69-71,73-77,79-82,99,109-302,307,321,336,340,347,352,364,369,371-372,380
+  s_202b59b4ccc642::t_8257aa078d9e78 23-24
+  s_202b59b4ccc642::t_a20a2362d3e849 14
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DocumentDao.kt
+  s_202b59b4ccc642::t_fe08318b15e29f 14-29
+core/domain/src/test/kotlin/com/salpiras/citizendocs/core/domain/ExportDocumentsUseCaseTest.kt
+  s_202b59b4ccc642::t_ff79857981bac0 1-59
+feature/documents/src/test/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsScreenScreenshotTest.kt
+  s_202b59b4ccc642::t_368382c953f085 14,38-40,43-49,57,63,70,74-81,83,87-101,108,115-116,124-125
+feature/documents/src/test/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsScreenTest.kt
+  s_202b59b4ccc642::t_98829443de78f6 77
+  s_202b59b4ccc642::t_e306822ae76e94 15,20,40-55,69-76,78-79,91,101,117,126,139,152,159-265
+core/ui/src/main/kotlin/com/salpiras/citizendocs/core/ui/DocumentGroup.kt
+  s_202b59b4ccc642::t_3464b1734d2060 1-38,43-50
+  s_202b59b4ccc642::t_649747b25ad926 39-42
+feature/documents/src/main/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsContract.kt
+  s_202b59b4ccc642::t_6f4a40d54153ed 17-18
+  s_202b59b4ccc642::t_3538bf66b5c699 5,9,12-16,19-20,25,28-34,58-72,81
+  s_202b59b4ccc642::t_f27924032f5e61 8
+  s_202b59b4ccc642::t_430d20cf2f88f4 82
+core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/component/CitizenDocsTopAppBar.kt
+  s_202b59b4ccc642::t_959ba92e5396a7 10-12,16,20,26,31-45
+  s_202b59b4ccc642::t_4e29830c3980da 13-15
+feature/documents/src/main/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsScreen.kt
+  s_202b59b4ccc642::t_9f759a4ffc739d 259
+  s_202b59b4ccc642::t_5ee4d0884063f7 9,16
+  s_202b59b4ccc642::t_a55f6f23c21747 67
+  s_202b59b4ccc642::t_c06a6d5b306a36 282
+  s_202b59b4ccc642::t_a409a7b1bc770e 336
+  s_202b59b4ccc642::t_a8722e03bd263e 3-6,12,23,27,29-30,32,38,40-42,44,46,49,60,69,87-95,103-104,125-127,130-136,162-169,180-181,191-258,260-278,281,289,292,301-335,337-357,393-394,412-427,434-449
+core/data/src/test/kotlin/com/salpiras/citizendocs/core/data/OfflineFirstDocumentsRepositoryTest.kt
+  s_202b59b4ccc642::t_bc091d05805f4e 24-25,30
+  s_202b59b4ccc642::t_e7591e34c8f75a 8
+  s_202b59b4ccc642::t_9a90380a3f59ee 123-171
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/ZipDocumentArchiver.kt
+  s_202b59b4ccc642::t_6f526094eaca69 1-3,5-25,35,39,48,51-52,58-59
+  s_202b59b4ccc642::t_e7edf29cd0612f 4
+  s_202b59b4ccc642::t_d23824c20977cd 26-34,36-38,40-47,49-50
+  s_202b59b4ccc642::t_4f94b34a1b78ef 53-57
+core/storage/src/test/kotlin/com/salpiras/citizendocs/core/storage/ZipDocumentArchiverTest.kt
+  s_202b59b4ccc642::t_df394107c3266a 1-136
+feature/documents/src/main/kotlin/com/salpiras/citizendocs/feature/documents/DocumentsViewModel.kt
+  s_202b59b4ccc642::t_ffe8a6b4f7449f 7-8,15,20-22,24,26-27,31-32,34,40,44-46,48,50,53-55,57-60,63,69-74,91-104,118-162,166-169,189-192
+  s_202b59b4ccc642::t_5173d681db233b 23
+  s_202b59b4ccc642::t_226a1eee34994c 36-38
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/DocumentArchiver.kt
+  s_202b59b4ccc642::t_d948cd789a51c1 1-17
+core/domain/src/main/kotlin/com/salpiras/citizendocs/core/domain/ExportDocumentsUseCase.kt
+  s_202b59b4ccc642::t_ca9905d6a039c3 1-27
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/LocalDocumentFileStore.kt
+  s_202b59b4ccc642::t_525e9009799b86 70,73
+core/ui/src/test/kotlin/com/salpiras/citizendocs/core/ui/DocumentGroupTest.kt
+  s_202b59b4ccc642::t_2d11bcc923f235 1-88
+README.md
+  s_202b59b4ccc642::t_50cec40b9084b8 4-6
+  s_202b59b4ccc642::t_2f78629855fc1f 141-159
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/FakeDocumentDao.kt
+  s_202b59b4ccc642::t_5484175936f419 22-27
+core/storage/src/main/kotlin/com/salpiras/citizendocs/core/storage/DocumentStore.kt
+  s_202b59b4ccc642::t_8d998773de1e0d 1-9
+gradle/gradle-daemon-jvm.properties
+  s_202b59b4ccc642::t_828e1e55ab7051 1-13
+settings.gradle.kts
+  s_202b59b4ccc642::t_49b75f4ae1dd37 15-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "c0af591a4c06728b0f86973865b8ecc581f5db73",
+  "prompts": {},
+  "sessions": {
+    "s_202b59b4ccc642": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af553dbd-aef7-4a36-a111-daa9d2110deb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
