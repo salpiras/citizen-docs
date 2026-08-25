@@ -1,0 +1,21 @@
+settings.gradle.kts
+  s_202b59b4ccc642::t_49b75f4ae1dd37 15-17
+gradle/gradle-daemon-jvm.properties
+  s_202b59b4ccc642::t_828e1e55ab7051 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "1fa27db1ef14267cfece01b60e4e62e4b7bb3fed",
+  "prompts": {},
+  "sessions": {
+    "s_202b59b4ccc642": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "af553dbd-aef7-4a36-a111-daa9d2110deb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
