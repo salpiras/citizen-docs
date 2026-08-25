@@ -4,54 +4,72 @@ import androidx.lifecycle.viewModelScope
 import com.salpiras.citizendocs.core.data.DocumentsRepository
 import com.salpiras.citizendocs.core.domain.DeleteDocumentUseCase
 import com.salpiras.citizendocs.core.domain.DeleteResult
+import com.salpiras.citizendocs.core.domain.ExportDocumentsUseCase
+import com.salpiras.citizendocs.core.domain.ExportResult
 import com.salpiras.citizendocs.core.domain.RenameDocumentUseCase
 import com.salpiras.citizendocs.core.domain.RenameResult
 import com.salpiras.citizendocs.core.model.Document
 import com.salpiras.citizendocs.core.model.DocumentId
 import com.salpiras.citizendocs.core.model.TitleValidation
 import com.salpiras.citizendocs.core.ui.UiText
-import com.salpiras.citizendocs.core.ui.asUiModel
+import com.salpiras.citizendocs.core.ui.groupByMonth
 import com.salpiras.citizendocs.core.ui.mvi.MviViewModel
 import com.salpiras.citizendocs.feature.documents.DocumentsUiState.Content
 import com.salpiras.citizendocs.feature.documents.DocumentsUiState.RenameState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.minus
+import kotlinx.collections.immutable.plus
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
 import javax.inject.Inject
+import kotlin.time.Clock
 
+// flatMapLatest is @ExperimentalCoroutinesApi; the lambda form of debounce is @FlowPreview.
+// Opted in here rather than project-wide, so each use is a deliberate choice.
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
-class DocumentsViewModel
-@Inject
-constructor(
+class DocumentsViewModel @Inject constructor(
     private val repository: DocumentsRepository,
     private val renameDocument: RenameDocumentUseCase,
     private val deleteDocument: DeleteDocumentUseCase,
+    private val exportDocuments: ExportDocumentsUseCase,
+    private val clock: Clock,
+    private val timeZone: TimeZone,
 ) : MviViewModel<DocumentsUiState, DocumentsEvent, DocumentsEffect>(DocumentsUiState()) {
+
     // The domain objects behind the current UI models, so click handlers can resolve an id
-    // back to a Document without the UI ever carrying one.
+    // back to a Document, and so export can archive exactly what the list is showing.
     private var documents: List<Document> = emptyList()
 
+    /** Drives the query the database is actually running, separate from the text in the field. */
+    private val query = MutableStateFlow("")
+
     init {
-        repository
-            .observeDocuments()
+        query
+            // Clearing feels instant; typing doesn't re-query on every keystroke.
+            .debounce { if (it.isEmpty()) 0L else SEARCH_DEBOUNCE_MS }
+            .flatMapLatest { repository.observeDocuments(it) }
             .onEach { docs ->
                 documents = docs
-                setState {
-                    copy(
-                        content =
-                        if (docs.isEmpty()) {
-                            Content.Empty
-                        } else {
-                            Content.Documents(docs.map(Document::asUiModel).toImmutableList())
-                        },
-                    )
-                }
+                setState { copy(content = contentFor(docs, query.value)) }
             }.catch {
                 setState { copy(content = Content.Error(UiText.Res(R.string.documents_load_failed))) }
             }.launchIn(viewModelScope)
+    }
+
+    private fun contentFor(documents: List<Document>, query: String): Content = when {
+        documents.isNotEmpty() -> Content.Documents(documents.groupByMonth())
+        query.isNotEmpty() -> Content.NoResults(query)
+        else -> Content.Empty
     }
 
     override fun onEvent(event: DocumentsEvent) {
@@ -70,6 +88,20 @@ constructor(
             DocumentsEvent.RenameConfirmed -> confirmRename()
 
             DocumentsEvent.RenameDismissed -> setState { copy(rename = null) }
+
+            DocumentsEvent.SearchOpened -> setState { copy(isSearchActive = true) }
+
+            DocumentsEvent.SearchClosed -> closeSearch()
+
+            is DocumentsEvent.SearchQueryChanged -> changeQuery(event.query)
+
+            is DocumentsEvent.GroupToggled -> toggleGroup(event.key)
+
+            DocumentsEvent.ExportClicked -> requestExport()
+
+            is DocumentsEvent.ExportDestinationChosen -> export(event.uri)
+
+            DocumentsEvent.ExportCancelled -> setState { copy(isExporting = false) }
         }
     }
 
@@ -83,14 +115,58 @@ constructor(
         setState { copy(rename = RenameState(id = id, title = document.title)) }
     }
 
+    private fun changeQuery(newQuery: String) {
+        // The field updates immediately so typing never feels laggy; the debounced flow
+        // decides when the database is actually asked.
+        setState { copy(searchQuery = newQuery) }
+        query.value = newQuery
+    }
+
+    private fun closeSearch() {
+        setState { copy(isSearchActive = false, searchQuery = "") }
+        query.value = ""
+    }
+
+    private fun toggleGroup(key: String) = setState {
+        copy(collapsedGroups = if (key in collapsedGroups) collapsedGroups - key else collapsedGroups + key)
+    }
+
+    private fun requestExport() {
+        if (documents.isEmpty()) {
+            sendEffect(DocumentsEffect.ShowMessage(UiText.Res(R.string.documents_export_nothing)))
+            return
+        }
+        val today = clock.todayIn(timeZone)
+        sendEffect(DocumentsEffect.LaunchExportPicker("citizen-docs-$today.zip"))
+    }
+
+    private fun export(destinationUri: String) {
+        if (currentState.isExporting) return
+        setState { copy(isExporting = true) }
+
+        // Snapshot what the list shows now, so an active search narrows the export and a
+        // concurrent database emission can't change the archive mid-write.
+        val toExport = documents
+        viewModelScope.launch {
+            val result = exportDocuments(toExport, destinationUri)
+            setState { copy(isExporting = false) }
+
+            val message = when (result) {
+                is ExportResult.Exported -> UiText.Res(R.string.documents_export_done, listOf(result.documentCount))
+                ExportResult.NothingToExport -> UiText.Res(R.string.documents_export_nothing)
+                is ExportResult.Failed -> UiText.Res(R.string.documents_export_failed)
+            }
+            sendEffect(DocumentsEffect.ShowMessage(message))
+        }
+    }
+
     private fun delete(id: DocumentId) {
         val title = documents.firstOrNull { it.id == id }?.title ?: return
         viewModelScope.launch {
-            val message =
-                when (deleteDocument(id)) {
-                    DeleteResult.Deleted -> UiText.Res(R.string.documents_deleted, listOf(title))
-                    is DeleteResult.Failed -> UiText.Res(R.string.documents_delete_failed)
-                }
+            val message = when (deleteDocument(id)) {
+                DeleteResult.Deleted -> UiText.Res(R.string.documents_deleted, listOf(title))
+                is DeleteResult.Failed -> UiText.Res(R.string.documents_delete_failed)
+            }
             sendEffect(DocumentsEffect.ShowMessage(message))
         }
     }
@@ -109,6 +185,10 @@ constructor(
                     sendEffect(DocumentsEffect.ShowMessage(UiText.Res(R.string.documents_rename_failed)))
             }
         }
+    }
+
+    private companion object {
+        const val SEARCH_DEBOUNCE_MS = 250L
     }
 }
 

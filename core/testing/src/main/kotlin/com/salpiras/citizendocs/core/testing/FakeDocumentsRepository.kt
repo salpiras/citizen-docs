@@ -36,7 +36,11 @@ class FakeDocumentsRepository : DocumentsRepository {
 
     fun current(): List<Document> = documents.value
 
-    override fun observeDocuments(): Flow<List<Document>> = documents.asStateFlow()
+    // Mirrors the DAO's contract: empty query matches everything, otherwise a
+    // case-insensitive substring match on the title.
+    override fun observeDocuments(query: String): Flow<List<Document>> = documents.map { docs ->
+        if (query.isEmpty()) docs else docs.filter { it.title.contains(query, ignoreCase = true) }
+    }
 
     override fun observeDocument(id: DocumentId): Flow<Document?> =
         documents.map { docs -> docs.firstOrNull { it.id == id } }
@@ -72,4 +76,20 @@ class FakeDocumentsRepository : DocumentsRepository {
     }
 
     override fun contentUri(document: Document): String = "content://test/${document.fileName}"
+
+    /** What the last [export] was asked to write, so tests can assert on scope and structure. */
+    var exported: List<Document>? = null
+        private set
+
+    var exportDestination: String? = null
+        private set
+
+    var exportFailure: Throwable? = null
+
+    override suspend fun export(documents: List<Document>, destinationUri: String): Long {
+        exportFailure?.let { throw it }
+        exported = documents
+        exportDestination = destinationUri
+        return documents.sumOf { it.sizeBytes }
+    }
 }

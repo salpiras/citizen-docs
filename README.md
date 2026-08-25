@@ -1,7 +1,9 @@
 # CitizenDocs
 
 Scan a document with your phone, give it a name and a date, and keep it in a list you can
-open, rename and delete. Everything stays on the device.
+search, open, rename and delete. Documents are filed into collapsible month sections, and the
+whole library — or just what a search is showing — exports to a ZIP foldered by year and
+month. Everything stays on the device.
 
 The app is deliberately small. It exists as a worked example of current Android practice —
 multi-module Clean Architecture, MVI, and a test pyramid that runs entirely on the JVM — with
@@ -135,6 +137,25 @@ rather than a recorded call sequence.
 - The database is `citizen-docs.db`, schema version 1, with `exportSchema = true`; schema
   JSON is committed under `core/database/schemas`. The earlier prototype's `docs` table is
   abandoned rather than migrated.
+
+## Search, grouping and export
+
+These three compose deliberately, and none of them needed a schema change:
+
+- **Search** is a single `LIKE` query in which an empty term matches everything, so the plain
+  list and the search results are the same statement — there is no second code path to keep
+  in step. The field updates immediately while the query itself is debounced, so typing never
+  feels laggy but the database isn't asked on every keystroke. "No matches" is a distinct
+  state from "no documents": telling someone with forty documents that they have none because
+  they mistyped would be wrong.
+- **Month sections** are derived from `documentDate`, never stored. Labels are pre-formatted
+  in `groupByMonth()` for the same reason `formattedDate` is — locale work stays out of
+  layout, and screenshot goldens stay host-independent.
+- **Export** writes whatever the list is currently showing, so an active search narrows the
+  archive for free. The destination comes from `ACTION_CREATE_DOCUMENT`, so no storage
+  permission is needed, and entry paths (`2026/01/Tax_return_2025.pdf`) mirror the month
+  sections on screen. A failure deletes the partial file: a truncated archive is worse than
+  none, because it looks like a valid backup.
 
 ## Keeping dependencies current
 

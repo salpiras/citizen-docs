@@ -5,6 +5,7 @@ import com.salpiras.citizendocs.core.model.DocumentId
 import com.salpiras.citizendocs.core.testing.FakeDocumentDao
 import com.salpiras.citizendocs.core.testing.FixedClock
 import com.salpiras.citizendocs.core.testing.InMemoryDocumentFileStore
+import com.salpiras.citizendocs.core.testing.RecordingDocumentArchiver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -20,10 +21,13 @@ class OfflineFirstDocumentsRepositoryTest {
     private val fileStore = InMemoryDocumentFileStore()
     private val clock = FixedClock(Instant.parse("2026-08-18T10:15:30Z"))
 
+    private val archiver = RecordingDocumentArchiver()
+
     private val repository =
         OfflineFirstDocumentsRepository(
             dao = dao,
             fileStore = fileStore,
+            archiver = archiver,
             clock = clock,
             io = UnconfinedTestDispatcher(),
         )
@@ -114,6 +118,55 @@ class OfflineFirstDocumentsRepositoryTest {
         assertThat(renamed.title).isEqualTo("Self assessment")
         assertThat(renamed.fileName).isEqualTo("Self_assessment.pdf")
         assertThat(fileStore.files.keys).containsExactly("Self_assessment.pdf")
+    }
+
+    @Test
+    fun `search filters by title substring`() = runTest {
+        repository.add(draft.copy(title = "Tax return 2025"))
+        repository.add(draft.copy(title = "Passport"))
+
+        assertThat(repository.observeDocuments("pass").first().map { it.title })
+            .containsExactly("Passport")
+    }
+
+    @Test
+    fun `an empty search query returns everything`() = runTest {
+        repository.add(draft.copy(title = "Tax return 2025"))
+        repository.add(draft.copy(title = "Passport"))
+
+        assertThat(repository.observeDocuments("").first()).hasSize(2)
+    }
+
+    // The zip's folders mirror the month sections the list shows.
+    @Test
+    fun `export folders entries by document year and month`() = runTest {
+        val id = repository.add(draft.copy(documentDate = LocalDate(2026, 1, 12)))
+        val document = repository.observeDocument(id).first()!!
+
+        repository.export(listOf(document), "content://downloads/out.zip")
+
+        assertThat(archiver.entries.map { it.pathInZip })
+            .containsExactly("2026/01/Tax_return_2025.pdf")
+    }
+
+    @Test
+    fun `export zero-pads the month`() = runTest {
+        val id = repository.add(draft.copy(title = "Bill", documentDate = LocalDate(2025, 9, 3)))
+        val document = repository.observeDocument(id).first()!!
+
+        repository.export(listOf(document), "content://downloads/out.zip")
+
+        assertThat(archiver.entries.single().pathInZip).isEqualTo("2025/09/Bill.pdf")
+    }
+
+    @Test
+    fun `export passes the destination to the archiver`() = runTest {
+        val id = repository.add(draft)
+        val document = repository.observeDocument(id).first()!!
+
+        repository.export(listOf(document), "content://downloads/out.zip")
+
+        assertThat(archiver.destinationUri).isEqualTo("content://downloads/out.zip")
     }
 
     @Test

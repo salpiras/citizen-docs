@@ -12,4 +12,8 @@ internal abstract class StorageModule {
     @Binds
     @Singleton
     abstract fun bindsDocumentFileStore(impl: LocalDocumentFileStore): DocumentFileStore
+
+    @Binds
+    @Singleton
+    abstract fun bindsDocumentArchiver(impl: ZipDocumentArchiver): DocumentArchiver
 }

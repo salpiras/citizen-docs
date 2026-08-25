@@ -25,4 +25,28 @@
     <string name="documents_title_too_long">Keep the name under %1$d characters.</string>
 
     <string name="documents_more_options">More options for %1$s</string>
+    <string name="documents_more_options_screen">More options</string>
+
+    <!-- Search -->
+    <string name="documents_search">Search documents</string>
+    <string name="documents_search_hint">Search by name</string>
+    <string name="documents_search_clear">Clear search</string>
+    <string name="documents_search_close">Close search</string>
+    <string name="documents_no_results_title">No matches</string>
+    <string name="documents_no_results_body">Nothing matches “%1$s”. Try a shorter or different word.</string>
+
+    <!-- Grouping -->
+    <string name="documents_group_collapse">Collapse %1$s</string>
+    <string name="documents_group_expand">Expand %1$s</string>
+    <plurals name="documents_group_count">
+        <item quantity="one">%1$d document</item>
+        <item quantity="other">%1$d documents</item>
+    </plurals>
+
+    <!-- Export -->
+    <string name="documents_export">Export as ZIP…</string>
+    <string name="documents_export_done">Exported %1$d documents.</string>
+    <string name="documents_export_nothing">There\'s nothing to export.</string>
+    <string name="documents_export_failed">We couldn\'t finish the export. Nothing was saved.</string>
+    <string name="documents_exporting">Exporting…</string>
 </resources>
