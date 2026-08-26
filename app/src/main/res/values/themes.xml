@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.CitizenDocs" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+      This theme only has to survive the moment between the window opening and Compose's
+      first frame. Everything after that comes from CitizenDocsTheme.
+    -->
+    <style name="Theme.CitizenDocs" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
 </resources>

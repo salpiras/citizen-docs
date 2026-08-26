@@ -2,6 +2,8 @@
 <resources>
     <string name="documents_title">My documents</string>
     <string name="documents_scan_action">Scan a document</string>
+    <!-- The extended FAB's visible label. Short, because it shares the button with an icon. -->
+    <string name="documents_scan_label">Scan</string>
     <string name="documents_loading">Loading your documents…</string>
 
     <string name="documents_empty_title">No documents yet</string>

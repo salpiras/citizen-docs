@@ -17,6 +17,13 @@ data class DocumentsUiState(
     /** Keys of month sections the user has collapsed. Persistent so +/- stay immutable. */
     val collapsedGroups: PersistentSet<String> = persistentSetOf(),
     val isExporting: Boolean = false,
+    /**
+     * A document that has just been added, for the row to acknowledge briefly.
+     *
+     * Transient by design: the ViewModel sets it when it sees an insertion and clears it a
+     * moment later, so nothing has to remember to switch it off and rotation cannot replay it.
+     */
+    val highlighted: DocumentId? = null,
 ) {
     @Immutable
     sealed interface Content {

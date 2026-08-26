@@ -3,6 +3,11 @@ package com.salpiras.citizendocs.feature.documents
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,12 +17,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +38,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,9 +49,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -54,6 +66,7 @@ import com.salpiras.citizendocs.core.designsystem.component.CitizenDocsTopAppBar
 import com.salpiras.citizendocs.core.designsystem.component.EmptyState
 import com.salpiras.citizendocs.core.designsystem.component.ErrorState
 import com.salpiras.citizendocs.core.designsystem.component.LoadingState
+import com.salpiras.citizendocs.core.designsystem.motion.CitizenDocsMotion
 import com.salpiras.citizendocs.core.designsystem.theme.CitizenDocsTheme
 import com.salpiras.citizendocs.core.model.DocumentId
 import com.salpiras.citizendocs.core.ui.DocumentCard
@@ -125,24 +138,32 @@ internal fun DocumentsScreen(
     // Search is a mode, so back should leave it before leaving the screen.
     BackHandler(enabled = state.isSearchActive) { onEvent(DocumentsEvent.SearchClosed) }
 
+    // Hoisted here rather than owned by DocumentList, because the FAB needs to read it too.
+    val listState = rememberLazyListState()
+
     Scaffold(
         modifier = modifier,
         topBar = {
-            if (state.isSearchActive) {
-                SearchAppBar(query = state.searchQuery, onEvent = onEvent)
-            } else {
-                DocumentsAppBar(isExporting = state.isExporting, onEvent = onEvent)
+            // AnimatedContent rather than a bare `if`: swapping the two bars outright made
+            // search appear and vanish with a cut. The subtree is one app bar, so the cost
+            // of cross-fading it is trivial.
+            AnimatedContent(
+                targetState = state.isSearchActive,
+                transitionSpec = {
+                    fadeIn(CitizenDocsMotion.effectsDefault()) togetherWith
+                        fadeOut(CitizenDocsMotion.effectsFast())
+                },
+                label = "documentsTopBar",
+            ) { searching ->
+                if (searching) {
+                    SearchAppBar(query = state.searchQuery, onEvent = onEvent)
+                } else {
+                    DocumentsAppBar(isExporting = state.isExporting, onEvent = onEvent)
+                }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { onEvent(DocumentsEvent.ScanClicked) }) {
-                Icon(
-                    imageVector = CitizenDocsIcons.DocumentScanner,
-                    contentDescription = stringResource(R.string.documents_scan_action),
-                )
-            }
-        },
+        floatingActionButton = { ScanFab(listState = listState, onEvent = onEvent) },
     ) { padding ->
         when (val content = state.content) {
             Content.Loading ->
@@ -181,11 +202,46 @@ internal fun DocumentsScreen(
                     collapsedGroups = state.collapsedGroups,
                     onEvent = onEvent,
                     contentPadding = padding,
+                    listState = listState,
+                    highlighted = state.highlighted,
                 )
         }
     }
 
     state.rename?.let { rename -> RenameDialog(state = rename, onEvent = onEvent) }
+}
+
+/**
+ * Collapses to a plain icon once the list has scrolled, so a long library isn't read through
+ * a permanent label.
+ *
+ * `derivedStateOf` is what makes this cheap. `firstVisibleItemIndex` changes on every row
+ * that passes, but the boolean derived from it changes twice in a whole scroll, and a
+ * derived state only notifies its readers when its *result* changes — so this recomposes on
+ * the two threshold crossings rather than on every frame of the scroll.
+ *
+ * The accessible name is set on the button rather than left to the icon: when collapsed
+ * there is no text to read, and when expanded an icon description plus a label would have
+ * TalkBack announce the same thing twice.
+ */
+@Composable
+private fun ScanFab(listState: LazyListState, onEvent: (DocumentsEvent) -> Unit) {
+    val expanded by remember { derivedStateOf { listState.firstVisibleItemIndex == 0 } }
+    val description = stringResource(R.string.documents_scan_action)
+
+    ExtendedFloatingActionButton(
+        onClick = { onEvent(DocumentsEvent.ScanClicked) },
+        expanded = expanded,
+        icon = { Icon(imageVector = CitizenDocsIcons.DocumentScanner, contentDescription = null) },
+        text = { Text(stringResource(R.string.documents_scan_label)) },
+        // Filled primary rather than the M3 default primaryContainer. With the container
+        // role, this palette gives a pale peach button in light and a saturated sienna one in
+        // dark — the same control reading as two different levels of emphasis depending on
+        // the time of day. primary is the same weight in both.
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        modifier = Modifier.semantics { contentDescription = description },
+    )
 }
 
 @Composable
@@ -282,9 +338,12 @@ private fun DocumentList(
     collapsedGroups: PersistentSet<String>,
     onEvent: (DocumentsEvent) -> Unit,
     contentPadding: PaddingValues,
+    listState: LazyListState,
+    highlighted: DocumentId?,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
+        state = listState,
         // consumeWindowInsets prevents any nested component double-applying the same insets.
         modifier = modifier
             .fillMaxSize()
@@ -311,12 +370,23 @@ private fun DocumentList(
 
             if (!collapsed) {
                 // Keyed on the id: the old list keyed on title, so two documents sharing a
-                // name crashed the LazyColumn with a duplicate-key exception.
+                // name crashed the LazyColumn with a duplicate-key exception. The key now
+                // earns its keep twice over — animateItem can only track a row across a
+                // change if the row has a stable identity.
                 items(items = group.documents, key = { it.id.value }) { document ->
                     DocumentCard(
                         document = document,
                         onClick = { onEvent(DocumentsEvent.DocumentClicked(document.id)) },
+                        highlighted = document.id == highlighted,
                         trailing = { DocumentOverflowMenu(document = document, onEvent = onEvent) },
+                        // Collapsing a month, deleting a row and filtering by search all
+                        // change this list. animateItem runs those in the layout pass, so
+                        // none of them cost a recomposition.
+                        modifier = Modifier.animateItem(
+                            fadeInSpec = CitizenDocsMotion.effectsDefault(),
+                            placementSpec = CitizenDocsMotion.offsetDefault(),
+                            fadeOutSpec = CitizenDocsMotion.effectsFast(),
+                        ),
                     )
                 }
             }
@@ -331,21 +401,39 @@ private fun MonthHeader(group: DocumentGroup, collapsed: Boolean, onClick: () ->
         group.label,
     )
 
+    // Same trick as the card's press scale: the rotation is driven by an Animatable from a
+    // LaunchedEffect and read inside the graphicsLayer lambda, so the chevron turns in the
+    // draw phase and the header never recomposes for it.
+    val rotation = remember { Animatable(if (collapsed) COLLAPSED_DEGREES else EXPANDED_DEGREES) }
+    LaunchedEffect(collapsed) {
+        rotation.animateTo(
+            targetValue = if (collapsed) COLLAPSED_DEGREES else EXPANDED_DEGREES,
+            animationSpec = CitizenDocsMotion.spatialFast(),
+        )
+    }
+
     // Opaque, because a sticky header scrolls over the rows beneath it.
     Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp),
         ) {
-            IconButton(onClick = onClick) {
-                Icon(
-                    imageVector = if (collapsed) CitizenDocsIcons.Expand else CitizenDocsIcons.Collapse,
-                    contentDescription = toggleDescription,
+            // A filled pill rather than a bare heading: it reads as a tab on a divider in a
+            // box of paper, which is the whole conceit of the redesign.
+            Surface(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                shape = CircleShape,
+            ) {
+                Text(
+                    text = group.label,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
                 )
             }
-            Text(text = group.label, style = MaterialTheme.typography.titleMedium)
             Text(
                 text = pluralStringResource(
                     R.plurals.documents_group_count,
@@ -354,8 +442,15 @@ private fun MonthHeader(group: DocumentGroup, collapsed: Boolean, onClick: () ->
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = Modifier.weight(1f),
             )
+            IconButton(onClick = onClick) {
+                Icon(
+                    imageVector = CitizenDocsIcons.Chevron,
+                    contentDescription = toggleDescription,
+                    modifier = Modifier.graphicsLayer { rotationZ = rotation.value },
+                )
+            }
         }
     }
 }
@@ -391,6 +486,10 @@ private fun DocumentOverflowMenu(document: DocumentUiModel, onEvent: (DocumentsE
 }
 
 private const val ZIP_MIME_TYPE = "application/zip"
+
+// The chevron points down to mean "expand" and turns half a circle to mean "collapse".
+private const val COLLAPSED_DEGREES = 0f
+private const val EXPANDED_DEGREES = 180f
 
 @PreviewLightDark
 @Composable

@@ -8,6 +8,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.salpiras.citizendocs.core.designsystem.theme.CitizenDocsTheme
+import com.salpiras.citizendocs.core.model.DocumentId
 import com.salpiras.citizendocs.core.testing.CitizenDocsRoborazziOptions
 import com.salpiras.citizendocs.core.ui.UiText
 import com.salpiras.citizendocs.feature.documents.DocumentsUiState.Content
@@ -22,9 +23,21 @@ import org.robolectric.annotation.GraphicsMode
 /**
  * Goldens live in `src/test/screenshots` next to the code they cover.
  *
- * `dynamicColor = false` is essential: with it on, the palette would follow the host
- * wallpaper and every golden would be machine-dependent. See [CitizenDocsRoborazziOptions]
- * for why comparison is not pixel-exact.
+ * Two theme parameters are pinned, and both are load-bearing.
+ *
+ * `dynamicColor = false`: with it on, the palette would follow the host wallpaper and every
+ * golden would be machine-dependent.
+ *
+ * `reducedMotion = true`: the loading and empty states animate on a
+ * `rememberInfiniteTransition`, and an infinite transition never reports idle — not at any
+ * setting of the test clock, because there is always another frame owed. Roborazzi waits for
+ * idle before capturing, so without this the capture does not produce a wrong image, it
+ * never produces one at all. Pinning it also fixes the shimmer at a known phase.
+ *
+ * The frozen `mainClock` below is a separate concern: it makes finite animations land on the
+ * same frame every run.
+ *
+ * See [CitizenDocsRoborazziOptions] for why comparison is not pixel-exact.
  *
  * Record with `./gradlew recordRoborazziDebug`, verify with `./gradlew verifyRoborazziDebug`.
  */
@@ -36,11 +49,11 @@ class DocumentsScreenScreenshotTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private fun capture(name: String, darkTheme: Boolean, state: DocumentsUiState) {
-        // Progress indicators animate forever, so the default auto-advancing clock never
-        // reports idle. Freeze it and step a fixed amount for frame-to-frame determinism.
+        // Freeze the clock and step a fixed amount, so every finite animation on screen is
+        // captured at the same point in its curve on every run.
         composeTestRule.mainClock.autoAdvance = false
         composeTestRule.setContent {
-            CitizenDocsTheme(darkTheme = darkTheme, dynamicColor = false) {
+            CitizenDocsTheme(darkTheme = darkTheme, dynamicColor = false, reducedMotion = true) {
                 DocumentsScreen(
                     state = state,
                     onEvent = {},
@@ -101,11 +114,29 @@ class DocumentsScreenScreenshotTest {
         ),
     )
 
+    // Both modes, because the skeleton is built entirely from surface roles and getting the
+    // dark ramp the wrong way round would make the placeholders vanish into the background.
     @Test
     fun loading_light() = capture(
         "DocumentsScreen_loading_light",
         darkTheme = false,
         state = DocumentsUiState(content = Content.Loading),
+    )
+
+    @Test
+    fun loading_dark() = capture(
+        "DocumentsScreen_loading_dark",
+        darkTheme = true,
+        state = DocumentsUiState(content = Content.Loading),
+    )
+
+    // The spot accent's only appearance, so it is worth a golden of its own — this is the
+    // one case where a colour outside the scheme is supposed to show up.
+    @Test
+    fun highlighted_light() = capture(
+        "DocumentsScreen_highlighted_light",
+        darkTheme = false,
+        state = populated().copy(highlighted = DocumentId(2)),
     )
 
     @Test

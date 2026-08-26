@@ -35,11 +35,13 @@ enough room left to grow (search, tags, OCR, backup) without re-laying the found
            :core:database   :core:storage      Room          files + FileProvider
 
   :core:scanner        ML Kit wrapper + Compose launcher
-  :core:designsystem   theme, tokens, model-agnostic components
+  :core:designsystem   theme, tokens, motion, model-agnostic components
   :core:ui             MVI base, DocumentCard, UiText
   :core:model          Document, validation, file-name sanitising   (pure JVM)
   :core:common         dispatcher qualifiers, Clock/TimeZone        (pure JVM)
   :core:testing        fakes, rules, shared fixtures
+
+  :benchmarks          macrobenchmarks + baseline profile generation (needs a device)
 ```
 
 Dependencies point one way only: UI → domain → data → (database | storage). A feature module
@@ -78,6 +80,15 @@ tests and screenshot tests.
 
 The whole suite runs on the JVM — no emulator, no connected device.
 
+`:benchmarks` is the one exception, because measuring ART is the point of it:
+
+```bash
+./gradlew :app:generateBaselineProfile              # record; commits into app/src/main/generated
+./gradlew :benchmarks:connectedBenchmarkAndroidTest # measure (physical device — emulators are too noisy)
+```
+
+The generated `baseline-prof.txt` is **committed**. CI has no emulator and only consumes it.
+
 ### Screenshot tests
 
 Goldens live beside the code, in `feature/<name>/src/test/screenshots`, and are committed.
@@ -88,8 +99,11 @@ Goldens live beside the code, in `feature/<name>/src/test/screenshots`, and are 
 ```
 
 `roborazzi.test.verify=true` in `gradle.properties` means verification also runs as part of
-the normal unit test task. Screenshot tests force `dynamicColor = false`; with Material You
-enabled the palette would follow the host wallpaper and goldens would differ per machine.
+the normal unit test task. Screenshot tests pin two theme parameters. `dynamicColor = false`
+keeps the palette off the host wallpaper. `reducedMotion = true` is the stronger requirement:
+the loading and empty states run on a `rememberInfiniteTransition`, which never reports idle
+at any test-clock setting, and Roborazzi waits for idle — so without it the capture does not
+come out wrong, it never comes out at all.
 
 Comparison allows a **1% pixel change** rather than Roborazzi's default of zero. Goldens
 recorded on macOS and verified on Linux CI differ by a few pixels on anti-aliased rounded
@@ -121,6 +135,51 @@ scrim animation never reports idle, so the capture times out.
 Fakes are hand-written and live in `:core:testing`; there is no mocking framework. A fake
 enforces the same invariants as the real implementation, so a passing test reflects behaviour
 rather than a recorded call sequence.
+
+## Design system and motion
+
+The palette is hand-authored in
+[`Color.kt`](core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/theme/Color.kt),
+not exported from the Material Theme Builder: warm sienna primary, sage and brass in support,
+paper-white ground in light and warm charcoal in dark. Every neutral carries the accents' hue,
+so surfaces read as paper rather than as grey chrome. `dynamicColor` defaults to **false** —
+with it on, almost nobody on Android 12+ would ever see any of this.
+
+One colour sits deliberately outside the M3 scheme, in
+[`AccentColors.kt`](core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/theme/AccentColors.kt):
+a marigold spot used only when a scan lands. Keeping it out of `ColorScheme` is what stops it
+drifting into ordinary chrome.
+
+No font assets are bundled. Display and headline roles use the platform serif; everything read
+in bulk stays on the platform sans.
+
+### The motion rule
+
+**Animated values are read in the layout or draw phase, never at composition scope.** Every
+animation in the app is either an `Animatable` dereferenced inside a `graphicsLayer {}` or
+`drawWithCache {}` lambda, or a modifier that animates without recomposing — card press scale,
+the month chevron, the arrival wash, the loading shimmer. `Modifier.animateItem` handles list
+insert, remove and reorder in the layout pass; the FAB collapses on a `derivedStateOf`, so it
+recomposes on the two threshold crossings rather than on every frame of a scroll.
+
+Springs, not durations, from
+[`CitizenDocsMotion`](core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/motion/CitizenDocsMotion.kt):
+an interrupted animation continues from its current velocity instead of restarting. M3 ships
+this idea as `MotionScheme`, but that and `MaterialExpressiveTheme` are `internal` in
+material3 1.4.0, so these are ours until the expressive APIs go public.
+
+Decorative motion — the shimmer, the empty state's drift — is gated on
+[`LocalReducedMotion`](core/designsystem/src/main/kotlin/com/salpiras/citizendocs/core/designsystem/motion/ReducedMotion.kt),
+which follows the platform animator duration scale on device and is pinned in tests.
+
+Check the compiler's own view of any of this with:
+
+```bash
+./gradlew assembleDebug -PcomposeMetrics=true
+```
+
+That writes skippability and stability reports to `<module>/build/compose-reports`. Off by
+default because it slows every Compose compilation down.
 
 ## Notes on the data model
 
@@ -160,7 +219,10 @@ These three compose deliberately, and none of them needed a schema change:
 ## Keeping dependencies current
 
 Versions live in [`gradle/libs.versions.toml`](gradle/libs.versions.toml) and are pinned to
-released stable artifacts — no `-alpha`, `-beta` or `-rc` pins anywhere. Kotlin deliberately
+released stable artifacts. There is exactly one exception, and it is recorded next to the
+pin: `androidxBenchmark` is on `1.5.0-rc01` because the stable 1.4.1 Baseline Profile plugin
+refuses to apply to an AGP 9 application module, so no stable version of it works with this
+build at all. Kotlin deliberately
 stays on the 2.3 line rather than 2.4: KSP has no 2.4.x release, and KSP drives both Hilt and
 Room. Check for updates against the repositories rather than another sample project:
 

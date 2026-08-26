@@ -43,3 +43,6 @@ include(":core:testing")
 
 include(":feature:documents")
 include(":feature:scan")
+
+// Not a source set of the app: a separate test APK that drives the installed one.
+include(":benchmarks")

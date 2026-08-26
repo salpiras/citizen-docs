@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!--
+      The only colour that has to exist as a resource: the window background is painted by
+      the platform before Compose has drawn anything. Without it the app flashed the stock
+      Material light grey on every cold start, which in dark mode is a white flash.
+
+      It must track surface/background in Color.kt by hand — there is no way to read a
+      Compose colour from a theme attribute. See values-night/colors.xml for the dark value.
+
+      The purple/teal/black/white entries that used to live here were new-project template
+      leftovers; nothing referenced any of them.
+    -->
+    <color name="window_background">#FBF6EF</color>
 </resources>

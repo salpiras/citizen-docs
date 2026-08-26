@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.citizendocs.android.application.compose)
     alias(libs.plugins.citizendocs.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -28,6 +29,17 @@ android {
     }
 }
 
+// The Baseline Profile plugin derives `nonMinifiedRelease` and `benchmarkRelease` from
+// `release`, which has no signing config — and an unsigned APK cannot be installed on the
+// device that has to run the profiling. Sign just those two with the debug key. `release`
+// itself is deliberately left alone: a real release must not be debug-signed by accident.
+afterEvaluate {
+    val debugSigning = android.signingConfigs.getByName("debug")
+    listOf("nonMinifiedRelease", "benchmarkRelease").forEach { name ->
+        android.buildTypes.findByName(name)?.signingConfig = debugSigning
+    }
+}
+
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:common"))
@@ -48,6 +60,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.profileinstaller)
+
+    // Where the committed baseline profile comes from. This does not make :benchmarks part
+    // of the app — it only tells the plugin which module regenerates the profile.
+    baselineProfile(project(":benchmarks"))
 
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.compose.ui.test)

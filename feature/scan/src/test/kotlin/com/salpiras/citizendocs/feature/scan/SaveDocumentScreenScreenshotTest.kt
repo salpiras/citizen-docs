@@ -27,7 +27,9 @@ class SaveDocumentScreenScreenshotTest {
     private fun capture(name: String, darkTheme: Boolean, state: SaveDocumentUiState) {
         composeTestRule.mainClock.autoAdvance = false
         composeTestRule.setContent {
-            CitizenDocsTheme(darkTheme = darkTheme, dynamicColor = false) {
+            // reducedMotion for the same reason as dynamicColor: both are pinned so the
+            // golden depends on nothing but the code. See DocumentsScreenScreenshotTest.
+            CitizenDocsTheme(darkTheme = darkTheme, dynamicColor = false, reducedMotion = true) {
                 SaveDocumentScreen(
                     state = state,
                     onEvent = {},
