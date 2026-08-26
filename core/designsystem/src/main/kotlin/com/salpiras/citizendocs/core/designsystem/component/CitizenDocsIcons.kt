@@ -8,7 +8,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DocumentScanner
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ErrorOutline
-import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.FolderZip
 import androidx.compose.material.icons.filled.MoreVert
@@ -26,6 +25,10 @@ object CitizenDocsIcons {
     val Search = Icons.Default.Search
     val Back = Icons.AutoMirrored.Filled.ArrowBack
     val Export = Icons.Default.FolderZip
-    val Expand = Icons.Default.ExpandMore
-    val Collapse = Icons.Default.ExpandLess
+
+    /**
+     * One chevron, not an Expand/Collapse pair. Swapping two glyphs can only cut; a single
+     * glyph rotated 180° animates between the two states, which is the whole point.
+     */
+    val Chevron = Icons.Default.ExpandMore
 }

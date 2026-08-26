@@ -13,6 +13,7 @@ import com.salpiras.citizendocs.core.ui.UiText
 import com.salpiras.citizendocs.feature.documents.DocumentsUiState.Content
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import org.junit.Rule
@@ -385,5 +386,63 @@ class DocumentsViewModelTest {
 
         assertThat(viewModel.state.value.rename).isNull()
         assertThat(repository.current().single().title).isEqualTo("Tax return 2025")
+    }
+
+    // --- Arrival highlight ----------------------------------------------------------------
+    //
+    // runCurrent rather than advanceUntilIdle: the highlight clears itself on a timer, and
+    // advancing all of virtual time would run that timer too, so the assertion would only
+    // ever see the cleared state.
+
+    @Test
+    fun `highlights a document that arrives after the list has loaded`() = runTest {
+        repository.seed(TestDocuments.taxReturn)
+        val viewModel = viewModel()
+        advanceUntilIdle()
+
+        repository.seed(TestDocuments.taxReturn, TestDocuments.passport)
+        runCurrent()
+
+        assertThat(viewModel.state.value.highlighted).isEqualTo(TestDocuments.passport.id)
+    }
+
+    @Test
+    fun `stops highlighting after a moment`() = runTest {
+        repository.seed(TestDocuments.taxReturn)
+        val viewModel = viewModel()
+        advanceUntilIdle()
+
+        repository.seed(TestDocuments.taxReturn, TestDocuments.passport)
+        advanceUntilIdle()
+
+        assertThat(viewModel.state.value.highlighted).isNull()
+    }
+
+    // Otherwise opening the app would light up every row the user already had.
+    @Test
+    fun `highlights nothing on the first load`() = runTest {
+        repository.seed(TestDocuments.taxReturn)
+        val viewModel = viewModel()
+        runCurrent()
+
+        assertThat(viewModel.state.value.highlighted).isNull()
+    }
+
+    // Rows coming back because a search was cleared have not "arrived" — they were there all
+    // along. This is the case that makes the unchanged-query guard necessary.
+    @Test
+    fun `highlights nothing when clearing a search brings a row back`() = runTest {
+        repository.seed(TestDocuments.taxReturn, TestDocuments.passport)
+        val viewModel = viewModel()
+        advanceUntilIdle()
+
+        viewModel.onEvent(DocumentsEvent.SearchQueryChanged("tax"))
+        advanceUntilIdle()
+        assertThat(viewModel.state.value.content.titles()).containsExactly("Tax return 2025")
+
+        viewModel.onEvent(DocumentsEvent.SearchQueryChanged(""))
+        runCurrent()
+
+        assertThat(viewModel.state.value.highlighted).isNull()
     }
 }

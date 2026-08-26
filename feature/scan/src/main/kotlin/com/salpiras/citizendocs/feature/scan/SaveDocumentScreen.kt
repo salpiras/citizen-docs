@@ -1,7 +1,14 @@
 package com.salpiras.citizendocs.feature.scan
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -28,7 +35,9 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +47,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.salpiras.citizendocs.core.designsystem.component.CitizenDocsIcons
 import com.salpiras.citizendocs.core.designsystem.component.CitizenDocsTopAppBar
+import com.salpiras.citizendocs.core.designsystem.motion.CitizenDocsMotion
 import com.salpiras.citizendocs.core.designsystem.theme.CitizenDocsTheme
 import com.salpiras.citizendocs.core.ui.mvi.ObserveEffects
 import com.salpiras.citizendocs.core.ui.resolve
@@ -116,11 +126,37 @@ internal fun SaveDocumentScreen(
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(
-                text = pluralStringResource(R.plurals.scan_pages_scanned, state.pageCount, state.pageCount),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            // The same tile-and-row shape the list uses, so what you are about to save looks
+            // like what you will find afterwards.
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .padding(12.dp),
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(MaterialTheme.shapes.small)
+                        .background(MaterialTheme.colorScheme.primaryContainer),
+                ) {
+                    Icon(
+                        imageVector = CitizenDocsIcons.Document,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+                Text(
+                    text = pluralStringResource(R.plurals.scan_pages_scanned, state.pageCount, state.pageCount),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
 
             OutlinedTextField(
                 value = state.title,
@@ -151,14 +187,26 @@ internal fun SaveDocumentScreen(
                 enabled = !state.isSaving,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                if (state.isSaving) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                } else {
-                    Text(stringResource(R.string.scan_save))
+                // Cross-fade rather than a bare `if`. Swapping the label for a spinner
+                // outright made the button flicker at the exact moment the user is waiting
+                // to see whether the tap registered.
+                AnimatedContent(
+                    targetState = state.isSaving,
+                    transitionSpec = {
+                        fadeIn(CitizenDocsMotion.effectsDefault()) togetherWith
+                            fadeOut(CitizenDocsMotion.effectsFast())
+                    },
+                    label = "saveButton",
+                ) { saving ->
+                    if (saving) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    } else {
+                        Text(stringResource(R.string.scan_save))
+                    }
                 }
             }
         }

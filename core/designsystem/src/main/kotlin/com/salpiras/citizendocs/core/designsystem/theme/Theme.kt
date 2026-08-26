@@ -8,7 +8,10 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
+import com.salpiras.citizendocs.core.designsystem.motion.LocalReducedMotion
+import com.salpiras.citizendocs.core.designsystem.motion.rememberSystemReducedMotion
 
 private val DarkColorScheme =
     darkColorScheme(
@@ -89,8 +92,21 @@ private val LightColorScheme =
     )
 
 /**
- * [dynamicColor] defaults to true on device but is switched off by screenshot tests, whose
- * goldens must not depend on the host wallpaper.
+ * [dynamicColor] defaults to **false**. It used to default to true, which meant that on
+ * Android 12+ the wallpaper won and almost nobody ever saw the app's own palette — so the
+ * palette was not really the app's identity, it was decoration for old devices. The
+ * parameter stays because screenshot tests must pin it, and because turning it back on is
+ * then a one-word change.
+ *
+ * [reducedMotion] follows the same pattern for the same reason: on device it reads the
+ * user's setting, and tests pin it so that looping decorative motion cannot stall a capture.
+ * See [LocalReducedMotion].
+ *
+ * Still plain `MaterialTheme`. `MaterialExpressiveTheme` — and with it `MotionScheme`,
+ * whose spring specs M3 components would animate themselves with — is `internal` in
+ * material3 1.4.0, which is what this build's Compose BOM resolves to. Our own springs live
+ * in [com.salpiras.citizendocs.core.designsystem.motion.CitizenDocsMotion] until those APIs
+ * go public.
  *
  * System bar handling lives in MainActivity via `enableEdgeToEdge()`; the previous theme
  * imported WindowCompat and friends but never used them.
@@ -98,7 +114,8 @@ private val LightColorScheme =
 @Composable
 fun CitizenDocsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
+    reducedMotion: Boolean = rememberSystemReducedMotion(),
     content: @Composable () -> Unit,
 ) {
     val colorScheme =
@@ -113,9 +130,25 @@ fun CitizenDocsTheme(
             else -> LightColorScheme
         }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = CitizenDocsTypography,
-        content = content,
-    )
+    // The spot accent is not derived from the scheme, so it is not affected by dynamic
+    // colour either. That is deliberate: it is the one colour that always means the same
+    // thing, whatever the rest of the palette is doing.
+    val accentColors =
+        if (darkTheme) {
+            AccentColors(accent = accentDark, onAccent = onAccent)
+        } else {
+            AccentColors(accent = accentLight, onAccent = onAccent)
+        }
+
+    CompositionLocalProvider(
+        LocalAccentColors provides accentColors,
+        LocalReducedMotion provides reducedMotion,
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            shapes = CitizenDocsShapes,
+            typography = CitizenDocsTypography,
+            content = content,
+        )
+    }
 }

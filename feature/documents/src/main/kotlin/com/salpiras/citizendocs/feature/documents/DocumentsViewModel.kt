@@ -21,6 +21,8 @@ import kotlinx.collections.immutable.minus
 import kotlinx.collections.immutable.plus
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
@@ -53,17 +55,56 @@ class DocumentsViewModel @Inject constructor(
     /** Drives the query the database is actually running, separate from the text in the field. */
     private val query = MutableStateFlow("")
 
+    // What the previous emission contained, so an insertion can be told apart from a
+    // re-query. Null until the first emission arrives.
+    private var knownIds: Set<DocumentId>? = null
+    private var lastQuery: String? = null
+    private var highlightJob: Job? = null
+
     init {
         query
             // Clearing feels instant; typing doesn't re-query on every keystroke.
             .debounce { if (it.isEmpty()) 0L else SEARCH_DEBOUNCE_MS }
             .flatMapLatest { repository.observeDocuments(it) }
             .onEach { docs ->
+                val currentQuery = query.value
+                val ids = docs.mapTo(mutableSetOf(), Document::id)
+                val arrived = newlyArrived(ids, currentQuery)
+
+                knownIds = ids
+                lastQuery = currentQuery
                 documents = docs
-                setState { copy(content = contentFor(docs, query.value)) }
+                setState { copy(content = contentFor(docs, currentQuery)) }
+
+                arrived?.let(::highlight)
             }.catch {
                 setState { copy(content = Content.Error(UiText.Res(R.string.documents_load_failed))) }
             }.launchIn(viewModelScope)
+    }
+
+    /**
+     * The one id that appeared since the last emission, or null if this was not an insertion.
+     *
+     * Two cases have to be excluded or the list would light up for no reason. The first
+     * emission has nothing to compare against, so every document would count as new. And a
+     * changed query re-emits a different subset of the library — clearing a search brings
+     * rows *back*, which is not the same thing as a document arriving. Requiring exactly one
+     * new id under an unchanged query leaves only the case this is for: a scan just landed.
+     */
+    private fun newlyArrived(ids: Set<DocumentId>, currentQuery: String): DocumentId? {
+        val previous = knownIds ?: return null
+        if (lastQuery != currentQuery) return null
+        return (ids - previous).singleOrNull()
+    }
+
+    private fun highlight(id: DocumentId) {
+        // A second scan saved before the first has faded replaces it rather than racing it.
+        highlightJob?.cancel()
+        highlightJob = viewModelScope.launch {
+            setState { copy(highlighted = id) }
+            delay(HIGHLIGHT_MS)
+            setState { copy(highlighted = null) }
+        }
     }
 
     private fun contentFor(documents: List<Document>, query: String): Content = when {
@@ -189,6 +230,9 @@ class DocumentsViewModel @Inject constructor(
 
     private companion object {
         const val SEARCH_DEBOUNCE_MS = 250L
+
+        /** Long enough to notice on a list you are already looking at, short of a distraction. */
+        const val HIGHLIGHT_MS = 1_600L
     }
 }
 
