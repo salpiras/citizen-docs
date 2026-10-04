@@ -1,0 +1,45 @@
+gradle/libs.versions.toml
+  s_d6905e8c018298::t_efd0de34d1e93c 44-45
+  s_d6905e8c018298::t_a711a4d2e47638 127
+  s_d6905e8c018298::t_89254623c9d567 111-119
+core/drive/src/main/AndroidManifest.xml
+  s_d6905e8c018298::t_dc3682830e69a1 1-12
+core/drive/src/main/kotlin/com/salpiras/citizendocs/core/drive/DriveAuth.kt
+  s_d6905e8c018298::t_ee7aea1b8a9462 1-53
+core/drive/src/main/kotlin/com/salpiras/citizendocs/core/drive/DriveResources.kt
+  s_d6905e8c018298::t_8a7b9cffd0cc6c 1-41
+core/drive/src/main/kotlin/com/salpiras/citizendocs/core/drive/DriveAuthInterceptor.kt
+  s_d6905e8c018298::t_007d981c2af651 1-44
+core/drive/src/main/kotlin/com/salpiras/citizendocs/core/drive/OkHttpDriveClient.kt
+  s_d6905e8c018298::t_b079e04af7d326 1-225
+core/drive/build.gradle.kts
+  s_d6905e8c018298::t_744e7cd834bf32 27-28
+  s_d6905e8c018298::t_336df763f5f556 1-26,29
+core/drive/src/main/kotlin/com/salpiras/citizendocs/core/drive/DriveModule.kt
+  s_d6905e8c018298::t_32b694eff65e62 1-49
+core/drive/src/test/kotlin/com/salpiras/citizendocs/core/drive/OkHttpDriveClientTest.kt
+  s_d6905e8c018298::t_daf55e5b137c6d 1-245
+core/drive/src/main/kotlin/com/salpiras/citizendocs/core/drive/PlayServicesDriveAuth.kt
+  s_d6905e8c018298::t_78b40d06f53777 26-27
+  s_d6905e8c018298::t_350575cc1b451c 1-25,28-87
+core/drive/src/main/kotlin/com/salpiras/citizendocs/core/drive/DriveClient.kt
+  s_d6905e8c018298::t_46b822353c2675 1-83
+settings.gradle.kts
+  s_d6905e8c018298::t_1961d4ecf8e76d 41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "0c17bcbc2f5d54ccfa753d651ecb1fe3e34937af",
+  "prompts": {},
+  "sessions": {
+    "s_d6905e8c018298": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dcdafa95-d8b9-42f0-8190-fe640af2bfc7",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
