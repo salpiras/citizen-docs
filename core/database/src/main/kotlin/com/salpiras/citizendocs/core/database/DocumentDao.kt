@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import kotlin.time.Instant
 
 @Dao
 interface DocumentDao {
@@ -37,8 +38,13 @@ interface DocumentDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(entity: DocumentEntity): Long
 
-    @Query("UPDATE documents SET title = :title WHERE id = :id")
-    suspend fun updateTitle(id: Long, title: String): Int
+    /**
+     * Title and timestamp move together, in one statement. Splitting them would leave a
+     * moment where the row is renamed but still claims it has not changed — which is exactly
+     * the moment a backup would read it and decide there was nothing to re-upload.
+     */
+    @Query("UPDATE documents SET title = :title, updated_at = :updatedAt WHERE id = :id")
+    suspend fun updateTitle(id: Long, title: String, updatedAt: Instant): Int
 
     @Query("UPDATE documents SET file_name = :fileName WHERE id = :id")
     suspend fun updateFileName(id: Long, fileName: String): Int

@@ -120,6 +120,53 @@ class OfflineFirstDocumentsRepositoryTest {
         assertThat(fileStore.files.keys).containsExactly("Self_assessment.pdf")
     }
 
+    // --- Identity ---------------------------------------------------------------------
+
+    @Test
+    fun `add gives every document a distinct uuid`() = runTest {
+        val first = repository.add(draft)
+        val second = repository.add(draft.copy(title = "Passport"))
+
+        val uuids = listOf(first, second).map { repository.observeDocument(it).first()!!.uuid }
+
+        assertThat(uuids).containsNoDuplicates()
+        uuids.forEach { assertThat(it).matches("[0-9a-f]{32}") }
+    }
+
+    @Test
+    fun `a new document is created and updated at the same instant`() = runTest {
+        val id = repository.add(draft)
+
+        val document = repository.observeDocument(id).first()!!
+
+        assertThat(document.updatedAt).isEqualTo(document.createdAt)
+    }
+
+    // The whole point of updatedAt: it is what a backup reads to decide whether this
+    // document needs sending again.
+    @Test
+    fun `rename moves updatedAt but leaves createdAt alone`() = runTest {
+        val id = repository.add(draft)
+        val createdAt = repository.observeDocument(id).first()!!.createdAt
+        clock.advanceTo(Instant.parse("2026-09-01T08:00:00Z"))
+
+        repository.rename(id, "Self assessment")
+
+        val renamed = repository.observeDocument(id).first()!!
+        assertThat(renamed.updatedAt).isEqualTo(Instant.parse("2026-09-01T08:00:00Z"))
+        assertThat(renamed.createdAt).isEqualTo(createdAt)
+    }
+
+    @Test
+    fun `rename keeps the uuid, because it is the same document`() = runTest {
+        val id = repository.add(draft)
+        val uuid = repository.observeDocument(id).first()!!.uuid
+
+        repository.rename(id, "Self assessment")
+
+        assertThat(repository.observeDocument(id).first()!!.uuid).isEqualTo(uuid)
+    }
+
     @Test
     fun `search filters by title substring`() = runTest {
         repository.add(draft.copy(title = "Tax return 2025"))

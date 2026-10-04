@@ -27,6 +27,12 @@ class FakeDocumentsRepository : DocumentsRepository {
     /** Set to make the next [rename] or [delete] throw. */
     var mutationFailure: Throwable? = null
 
+    /**
+     * What [rename] stamps on `updatedAt`. Fixed rather than "now" so a test can assert on
+     * it; set it when a test needs to distinguish two successive renames.
+     */
+    var renameInstant: Instant = Instant.fromEpochMilliseconds(1)
+
     private var nextId = 1L
 
     fun seed(vararg docs: Document) {
@@ -52,9 +58,14 @@ class FakeDocumentsRepository : DocumentsRepository {
             docs +
                 Document(
                     id = id,
+                    // Derived from the row id rather than random, so the fake stays
+                    // deterministic while still giving every document a distinct identity —
+                    // which is the invariant the real store enforces with a unique index.
+                    uuid = "%032d".format(id.value),
                     title = draft.title,
                     documentDate = draft.documentDate,
                     createdAt = Instant.fromEpochMilliseconds(0),
+                    updatedAt = Instant.fromEpochMilliseconds(0),
                     fileName = "${draft.title}.pdf",
                     pageCount = draft.pageCount,
                     sizeBytes = 1_024,
@@ -66,7 +77,8 @@ class FakeDocumentsRepository : DocumentsRepository {
     override suspend fun rename(id: DocumentId, title: String) {
         mutationFailure?.let { throw it }
         documents.update { docs ->
-            docs.map { if (it.id == id) it.copy(title = title) else it }
+            // Mirrors the real repository: a rename is an edit, so it moves updatedAt.
+            docs.map { if (it.id == id) it.copy(title = title, updatedAt = renameInstant) else it }
         }
     }
 

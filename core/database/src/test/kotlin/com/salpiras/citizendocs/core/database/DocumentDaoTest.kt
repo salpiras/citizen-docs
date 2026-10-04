@@ -40,10 +40,14 @@ class DocumentDaoTest {
         database.close()
     }
 
+    // The uuid is derived from the file name, which every caller already keeps distinct —
+    // a shared constant would trip the unique index on the second insert of any test.
     private fun entity(title: String, fileName: String, date: LocalDate = LocalDate(2026, 1, 12)) = DocumentEntity(
+        uuid = fileName.hashCode().toString(),
         title = title,
         documentDate = date,
         createdAt = Instant.parse("2026-01-12T09:30:00Z"),
+        updatedAt = Instant.parse("2026-01-12T09:30:00Z"),
         fileName = fileName,
         pageCount = 3,
         sizeBytes = 248_000,
@@ -88,11 +92,26 @@ class DocumentDaoTest {
     }
 
     @Test
-    fun `updates the title`() = runTest {
+    fun `updates the title and the modified time together`() = runTest {
         val id = dao.insert(entity("Tax return 2025", "a.pdf"))
+        val renamedAt = Instant.parse("2026-02-01T10:00:00Z")
 
-        assertThat(dao.updateTitle(id, "Self assessment")).isEqualTo(1)
-        assertThat(dao.findById(id)!!.title).isEqualTo("Self assessment")
+        assertThat(dao.updateTitle(id, "Self assessment", renamedAt)).isEqualTo(1)
+
+        val stored = dao.findById(id)!!
+        assertThat(stored.title).isEqualTo("Self assessment")
+        assertThat(stored.updatedAt).isEqualTo(renamedAt)
+        // createdAt is history, not state: a rename must not rewrite when the document was filed.
+        assertThat(stored.createdAt).isEqualTo(Instant.parse("2026-01-12T09:30:00Z"))
+    }
+
+    @Test
+    fun `rejects a duplicate uuid`() = runTest {
+        dao.insert(entity("First", "a.pdf").copy(uuid = "same"))
+
+        val result = runCatching { dao.insert(entity("Second", "b.pdf").copy(uuid = "same")) }
+
+        assertThat(result.isFailure).isTrue()
     }
 
     @Test
