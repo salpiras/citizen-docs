@@ -1,0 +1,22 @@
+README.md
+  s_d6905e8c018298::t_94f29599fac86d 48-62
+  s_d6905e8c018298::t_5bb26e1c964bfb 35-40
+  s_d6905e8c018298::t_641258cde35de9 1-23,26-34,41-47,63-77,79-81,84,86,89-90,93-94,97,100-101,103-104,107,110,112-116,118,120
+  s_d6905e8c018298::t_965c1960c11758 24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "ae310eca6dce4dc1d5165c1d2cd7b9704bc33def",
+  "prompts": {},
+  "sessions": {
+    "s_d6905e8c018298": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dcdafa95-d8b9-42f0-8190-fe640af2bfc7",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
