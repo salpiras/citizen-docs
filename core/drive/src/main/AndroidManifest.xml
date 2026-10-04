@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      Declared here rather than in :app, the same way :core:storage declares its
+      FileProvider: the capability travels with the code that needs it, and the app manifest
+      does not have to list permissions for features it cannot see. This is the first and
+      only network access in the whole build.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+</manifest>

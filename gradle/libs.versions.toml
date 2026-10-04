@@ -41,6 +41,8 @@ kotlinxCoroutines = "1.11.0"
 kotlinxDatetime = "0.8.0"
 kotlinxSerializationJson = "1.11.0"
 mlkitDocumentScanner = "16.0.0"
+okhttp = "5.5.0"
+playServicesAuth = "22.0.0"
 
 # --- Testing ---------------------------------------------------------------
 androidxTestExt = "1.3.0"
@@ -106,6 +108,15 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 # --- Third party -----------------------------------------------------------
 mlkit-document-scanner = { group = "com.google.android.gms", name = "play-services-mlkit-document-scanner", version.ref = "mlkitDocumentScanner" }
+# Drive is five REST endpoints, so OkHttp is used directly rather than through Retrofit:
+# the upload is `multipart/related`, which Retrofit does not model, so those calls would
+# need hand-built bodies regardless — leaving Retrofit to add an abstraction and a
+# converter dependency for the three calls that are a plain GET or POST.
+okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp" }
+# AuthorizationClient: scoped Drive access. Credential Manager covers authentication, which
+# is a different question and not one this app asks.
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 
 # --- Testing ---------------------------------------------------------------
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidxBenchmark" }
@@ -113,6 +124,7 @@ androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.r
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxUiAutomator" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver3-junit4" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
