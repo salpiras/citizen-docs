@@ -1,0 +1,64 @@
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/CitizenDocsDatabase.kt
+  s_d6905e8c018298::t_7876068cf3aca2 22-23
+core/database/src/test/kotlin/com/salpiras/citizendocs/core/database/MigrationTest.kt
+  s_d6905e8c018298::t_626d3ef4bca895 10
+  s_d6905e8c018298::t_323796640e5d7c 121
+  s_d6905e8c018298::t_9145fdaa3e0221 1-9,11-25,28,30-120,122
+  s_d6905e8c018298::t_6439d2a7f5769e 26-27,29
+core/database/schemas/com.salpiras.citizendocs.core.database.CitizenDocsDatabase/2.json
+  s_d6905e8c018298::t_63caf939d603ed 1-108
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DatabaseModule.kt
+  s_d6905e8c018298::t_89c310014bfc70 27-28
+core/database/build.gradle.kts
+  s_d6905e8c018298::t_55fac373ed83af 11-20
+  s_d6905e8c018298::t_6947627a4620d2 21,23
+  s_d6905e8c018298::t_8508442e13a059 22
+  s_d6905e8c018298::t_ab1de7cee9e1db 24-25
+core/database/src/test/kotlin/com/salpiras/citizendocs/core/database/DocumentDaoTest.kt
+  s_d6905e8c018298::t_a2f3bbf88c744f 95,97,99-114
+  s_d6905e8c018298::t_b25a08e59fdf62 43-44,46,50
+core/data/src/test/kotlin/com/salpiras/citizendocs/core/data/OfflineFirstDocumentsRepositoryTest.kt
+  s_d6905e8c018298::t_bf118fc7f63f3d 123-169
+core/model/src/main/kotlin/com/salpiras/citizendocs/core/model/DocumentUuid.kt
+  s_d6905e8c018298::t_e99d5627a762e7 1-23
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DocumentEntity.kt
+  s_d6905e8c018298::t_6d53a03e52b2b1 18-21,26,30,38,42
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/DocumentDao.kt
+  s_d6905e8c018298::t_0e94b45aa103de 8
+  s_d6905e8c018298::t_5f63bb160480e0 41-47
+core/ui/src/test/kotlin/com/salpiras/citizendocs/core/ui/DocumentGroupTest.kt
+  s_d6905e8c018298::t_73e38f5ec6004a 13-26
+core/data/src/main/kotlin/com/salpiras/citizendocs/core/data/OfflineFirstDocumentsRepository.kt
+  s_d6905e8c018298::t_a7a2a684f2b6a3 10
+  s_d6905e8c018298::t_199dd0fac45597 50-53,57,60-61,76,79-80
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/TestDocuments.kt
+  s_d6905e8c018298::t_cf659888568c6e 13-15,19,23,32,36,45,49
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/FakeDocumentDao.kt
+  s_d6905e8c018298::t_d0d3202b1768d2 9
+  s_d6905e8c018298::t_37d6f3a0083195 42-43
+core/database/src/main/kotlin/com/salpiras/citizendocs/core/database/Migrations.kt
+  s_d6905e8c018298::t_e569936785b2dd 27
+  s_d6905e8c018298::t_6c2a37e6584111 28
+  s_d6905e8c018298::t_6de4e868256c95 1-26,29-36
+core/model/src/main/kotlin/com/salpiras/citizendocs/core/model/Document.kt
+  s_d6905e8c018298::t_52fe97b135bec3 16,18-19,23-29
+core/testing/src/main/kotlin/com/salpiras/citizendocs/core/testing/FakeDocumentsRepository.kt
+  s_d6905e8c018298::t_2dbc9be1bc98a7 30-35
+  s_d6905e8c018298::t_849d273e8d7cc7 61-64,68,80-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "4fe2dd7723b08ca300c00775325239d3e2ebfdf3",
+  "prompts": {},
+  "sessions": {
+    "s_d6905e8c018298": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dcdafa95-d8b9-42f0-8190-fe640af2bfc7",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Salvatore Piras <salvatore.piras@glovoapp.com>"
+    }
+  }
+}
