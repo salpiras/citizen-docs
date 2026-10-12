@@ -51,4 +51,7 @@
     <string name="documents_export_nothing">There\'s nothing to export.</string>
     <string name="documents_export_failed">We couldn\'t finish the export. Nothing was saved.</string>
     <string name="documents_exporting">Exporting…</string>
+
+    <!-- Backup -->
+    <string name="documents_backup">Back up to Drive…</string>
 </resources>

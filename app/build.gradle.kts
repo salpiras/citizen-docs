@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":core:scanner"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:ui"))
+    implementation(project(":feature:backup"))
     implementation(project(":feature:documents"))
     implementation(project(":feature:scan"))
 

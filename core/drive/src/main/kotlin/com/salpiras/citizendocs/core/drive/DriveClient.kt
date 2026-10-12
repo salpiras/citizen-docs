@@ -60,6 +60,16 @@ interface DriveClient {
     /** Non-folder children of [parentId], with their [DriveFile.appProperties] populated. */
     suspend fun listFiles(parentId: String): List<DriveFile>
 
+    /**
+     * Every non-folder file this app has ever created, wherever it now sits.
+     *
+     * Under `drive.file` that set is exactly this app's documents and nothing else, which is
+     * what makes a restore able to skip walking the year/month tree. It also means a restore
+     * still finds everything after the user has reorganised their Drive, which they are
+     * entitled to do and which a folder-walk would silently fail at.
+     */
+    suspend fun listAllFiles(): List<DriveFile>
+
     suspend fun upload(
         name: String,
         parentId: String,
@@ -79,5 +89,13 @@ interface DriveClient {
     suspend fun download(fileId: String, destination: OutputStream)
 }
 
-/** Drive said no, or the network did. */
-class DriveException(message: String, cause: Throwable? = null) : IOException(message, cause)
+/**
+ * Drive said no, or the network did.
+ *
+ * [statusCode] is null when the request never got an answer. It is carried because callers
+ * genuinely need to tell one failure from another: a 404 on an update means the user deleted
+ * the file in Drive and the right response is to upload it afresh, whereas treating that as a
+ * generic error would break every backup from then on.
+ */
+class DriveException(message: String, val statusCode: Int? = null, cause: Throwable? = null) :
+    IOException(message, cause)

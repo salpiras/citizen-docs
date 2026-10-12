@@ -70,6 +70,12 @@ constructor(
         )
     }
 
+    override suspend fun listAllFiles(): List<DriveFile> = withContext(io) {
+        // No parent clause at all. The scope is the filter: `drive.file` only ever returns
+        // files this app created, so this is the whole library and nothing of the user's own.
+        listPages("trashed = false and mimeType != '$FOLDER_MIME_TYPE'")
+    }
+
     override suspend fun upload(
         name: String,
         parentId: String,
@@ -182,7 +188,7 @@ constructor(
         // flattened into one, or the UI would offer "retry" where it should offer "connect".
         throw e
     } catch (e: IOException) {
-        throw DriveException("Could not reach Drive", e)
+        throw DriveException("Could not reach Drive", cause = e)
     }
 
     private fun Response.requireSuccess() {
@@ -192,7 +198,10 @@ constructor(
         // turns every support question into a guess.
         val detail = runCatching { body.string().take(ERROR_BODY_CHARS) }.getOrDefault("")
         close()
-        throw DriveException("Drive returned $code${if (detail.isBlank()) "" else ": $detail"}")
+        throw DriveException(
+            message = "Drive returned $code${if (detail.isBlank()) "" else ": $detail"}",
+            statusCode = code,
+        )
     }
 
     private companion object {

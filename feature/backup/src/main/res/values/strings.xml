@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="backup_title">Back up</string>
+    <string name="backup_close">Close</string>
+
+    <string name="backup_intro_title">Keep a copy in Google Drive</string>
+    <string name="backup_intro_body">Your documents stay on this phone. Connecting Drive puts a copy in a CitizenDocs folder you can open and read from anywhere.</string>
+    <string name="backup_connect">Connect Google Drive</string>
+    <string name="backup_connect_failed">Couldn\'t connect to Drive. Try again in a moment.</string>
+
+    <string name="backup_connected_title">Drive is connected</string>
+    <string name="backup_connected_body">CitizenDocs can only see the files it puts there — nothing else in your Drive.</string>
+
+    <string name="backup_now">Back up now</string>
+    <string name="backup_in_progress">Backing up…</string>
+    <string name="backup_done">Backed up %1$d documents. %2$d were already up to date.</string>
+    <string name="backup_nothing">There\'s nothing to back up yet.</string>
+    <string name="backup_failed">The backup didn\'t finish. Anything already sent is safe.</string>
+
+    <string name="backup_restore">Restore from Drive</string>
+    <string name="backup_restore_in_progress">Restoring…</string>
+    <string name="backup_restore_done">Restored %1$d documents. %2$d were already on this phone.</string>
+    <string name="backup_restore_nothing">There\'s nothing in Drive to restore.</string>
+    <string name="backup_restore_failed">The restore didn\'t finish. Nothing was left half-saved.</string>
+
+    <string name="backup_not_connected">Drive access has ended. Connect again to carry on.</string>
+</resources>

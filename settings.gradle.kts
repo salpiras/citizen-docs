@@ -42,6 +42,7 @@ include(":core:drive")
 include(":core:ui")
 include(":core:testing")
 
+include(":feature:backup")
 include(":feature:documents")
 include(":feature:scan")
 

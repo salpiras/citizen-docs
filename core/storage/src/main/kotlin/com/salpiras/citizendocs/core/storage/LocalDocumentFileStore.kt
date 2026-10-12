@@ -10,6 +10,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,6 +41,23 @@ constructor(
         }
         target.name
     }
+
+    override suspend fun persistStream(desiredStem: String, write: suspend (OutputStream) -> Unit): String =
+        withContext(io) {
+            val target = root.uniqueFile(desiredStem)
+            try {
+                target.outputStream().use { write(it) }
+            } catch (e: Throwable) {
+                // Same rule as persist: a half-written PDF is worse than none, because it
+                // looks like a document right up until someone opens it.
+                target.delete()
+                if (e is DocumentStoreException) throw e
+                throw DocumentStoreException.WriteFailed(target.name, e)
+            }
+            target.name
+        }
+
+    override fun openStream(fileName: String): InputStream = File(root, fileName).inputStream()
 
     override suspend fun rename(fileName: String, desiredStem: String): String = withContext(io) {
         val current = File(root, fileName)

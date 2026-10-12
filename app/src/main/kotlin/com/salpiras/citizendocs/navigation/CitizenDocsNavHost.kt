@@ -25,6 +25,8 @@ import com.salpiras.citizendocs.core.designsystem.motion.CitizenDocsMotion
 import com.salpiras.citizendocs.core.scanner.DocumentScanner
 import com.salpiras.citizendocs.core.scanner.ScanOutcome
 import com.salpiras.citizendocs.core.scanner.rememberDocumentScanLauncher
+import com.salpiras.citizendocs.feature.backup.BackupDestination
+import com.salpiras.citizendocs.feature.backup.BackupRoute
 import com.salpiras.citizendocs.feature.documents.DocumentsRoute
 import com.salpiras.citizendocs.feature.scan.SaveDocumentDestination
 import com.salpiras.citizendocs.feature.scan.SaveDocumentRoute
@@ -89,7 +91,13 @@ fun CitizenDocsNavHost(
             },
         ) {
             composable<DocumentsDestination> {
-                DocumentsRoute(onScanRequested = launchScan)
+                DocumentsRoute(
+                    onScanRequested = launchScan,
+                    onBackupRequested = { navController.navigate(BackupDestination) },
+                )
+            }
+            composable<BackupDestination> {
+                BackupRoute(onBack = { navController.popBackStack() })
             }
             composable<SaveDocumentDestination> {
                 SaveDocumentRoute(onFinished = { navController.popBackStack() })

@@ -29,4 +29,7 @@ internal object DatabaseModule {
 
     @Provides
     fun providesDocumentDao(database: CitizenDocsDatabase): DocumentDao = database.documentDao()
+
+    @Provides
+    fun providesDriveSyncDao(database: CitizenDocsDatabase): DriveSyncDao = database.driveSyncDao()
 }
