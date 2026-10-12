@@ -89,6 +89,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun DocumentsRoute(
     onScanRequested: () -> Unit,
+    onBackupRequested: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DocumentsViewModel = hiltViewModel(),
 ) {
@@ -123,6 +124,7 @@ fun DocumentsRoute(
     DocumentsScreen(
         state = state,
         onEvent = viewModel::onEvent,
+        onBackupRequested = onBackupRequested,
         snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
@@ -134,6 +136,7 @@ internal fun DocumentsScreen(
     onEvent: (DocumentsEvent) -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+    onBackupRequested: () -> Unit = {},
 ) {
     // Search is a mode, so back should leave it before leaving the screen.
     BackHandler(enabled = state.isSearchActive) { onEvent(DocumentsEvent.SearchClosed) }
@@ -158,7 +161,11 @@ internal fun DocumentsScreen(
                 if (searching) {
                     SearchAppBar(query = state.searchQuery, onEvent = onEvent)
                 } else {
-                    DocumentsAppBar(isExporting = state.isExporting, onEvent = onEvent)
+                    DocumentsAppBar(
+                        isExporting = state.isExporting,
+                        onEvent = onEvent,
+                        onBackupRequested = onBackupRequested,
+                    )
                 }
             }
         },
@@ -245,7 +252,7 @@ private fun ScanFab(listState: LazyListState, onEvent: (DocumentsEvent) -> Unit)
 }
 
 @Composable
-private fun DocumentsAppBar(isExporting: Boolean, onEvent: (DocumentsEvent) -> Unit) {
+private fun DocumentsAppBar(isExporting: Boolean, onEvent: (DocumentsEvent) -> Unit, onBackupRequested: () -> Unit) {
     var menuExpanded by rememberSaveable { mutableStateOf(false) }
 
     CitizenDocsTopAppBar(
@@ -278,6 +285,14 @@ private fun DocumentsAppBar(isExporting: Boolean, onEvent: (DocumentsEvent) -> U
                     onClick = {
                         menuExpanded = false
                         onEvent(DocumentsEvent.ExportClicked)
+                    },
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.documents_backup)) },
+                    leadingIcon = { Icon(CitizenDocsIcons.Backup, contentDescription = null) },
+                    onClick = {
+                        menuExpanded = false
+                        onBackupRequested()
                     },
                 )
             }

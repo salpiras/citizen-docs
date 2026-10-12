@@ -3,6 +3,7 @@ package com.salpiras.citizendocs.core.designsystem.component
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
+import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DocumentScanner
@@ -25,6 +26,7 @@ object CitizenDocsIcons {
     val Search = Icons.Default.Search
     val Back = Icons.AutoMirrored.Filled.ArrowBack
     val Export = Icons.Default.FolderZip
+    val Backup = Icons.Default.Backup
 
     /**
      * One chevron, not an Expand/Collapse pair. Swapping two glyphs can only cut; a single

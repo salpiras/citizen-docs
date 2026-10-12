@@ -11,6 +11,7 @@ dependencies {
     api(project(":core:model"))
     api(project(":core:data"))
     api(project(":core:database"))
+    api(project(":core:drive"))
     api(project(":core:storage"))
     api(libs.junit4)
     api(libs.truth)

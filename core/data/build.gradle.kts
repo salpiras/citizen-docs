@@ -11,6 +11,7 @@ dependencies {
     api(project(":core:model"))
     implementation(project(":core:common"))
     implementation(project(":core:database"))
+    implementation(project(":core:drive"))
     implementation(project(":core:storage"))
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.datetime)

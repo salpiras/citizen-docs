@@ -32,6 +32,11 @@ class FakeDocumentDao : DocumentDao {
 
     override suspend fun findById(id: Long): DocumentEntity? = rows.value.firstOrNull { it.id == id }
 
+    override suspend fun findByUuid(uuid: String): DocumentEntity? = rows.value.firstOrNull { it.uuid == uuid }
+
+    override suspend fun all(): List<DocumentEntity> =
+        rows.value.sortedWith(compareByDescending<DocumentEntity> { it.documentDate }.thenByDescending { it.id })
+
     override suspend fun insert(entity: DocumentEntity): Long {
         insertFailure?.let { throw it }
         val id = nextId++

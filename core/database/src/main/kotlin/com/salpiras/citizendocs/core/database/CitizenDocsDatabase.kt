@@ -10,7 +10,7 @@ import androidx.room.TypeConverters
  * `fallbackToDestructiveMigration()`, which silently wiped user documents on any schema change.
  */
 @Database(
-    entities = [DocumentEntity::class],
+    entities = [DocumentEntity::class, DriveSyncEntity::class],
     version = CitizenDocsDatabase.VERSION,
     exportSchema = true,
 )
@@ -18,9 +18,14 @@ import androidx.room.TypeConverters
 abstract class CitizenDocsDatabase : RoomDatabase() {
     abstract fun documentDao(): DocumentDao
 
+    abstract fun driveSyncDao(): DriveSyncDao
+
     companion object {
-        /** 2 added `uuid` and `updated_at`. See [MIGRATION_1_2]. */
-        const val VERSION = 2
+        /**
+         * 2 added `uuid` and `updated_at` ([MIGRATION_1_2]).
+         * 3 added `drive_sync` ([MIGRATION_2_3]).
+         */
+        const val VERSION = 3
         const val NAME = "citizen-docs.db"
     }
 }

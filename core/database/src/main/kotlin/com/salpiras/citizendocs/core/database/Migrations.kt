@@ -32,5 +32,29 @@ internal val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
+/**
+ * Adds the table recording what this device has put in Drive.
+ *
+ * Arrives with the code that reads it rather than alongside [MIGRATION_1_2], so there was
+ * never a version of the schema carrying a table nothing used.
+ *
+ * Nothing to backfill: before this migration nothing had been uploaded, so an empty table is
+ * the truth rather than a starting guess.
+ */
+internal val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `drive_sync` (
+                `document_uuid` TEXT NOT NULL,
+                `drive_file_id` TEXT NOT NULL,
+                `uploaded_at` INTEGER NOT NULL,
+                PRIMARY KEY(`document_uuid`)
+            )
+            """.trimIndent(),
+        )
+    }
+}
+
 /** Every migration, in order. The database builder takes them as a group. */
-internal val ALL_MIGRATIONS = arrayOf(MIGRATION_1_2)
+internal val ALL_MIGRATIONS = arrayOf(MIGRATION_1_2, MIGRATION_2_3)

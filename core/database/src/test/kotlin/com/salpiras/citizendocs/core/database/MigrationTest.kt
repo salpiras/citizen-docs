@@ -96,6 +96,41 @@ class MigrationTest {
         }
     }
 
+    @Test
+    fun `migrating from 2 to 3 adds an empty sync table`() {
+        helper.createDatabase(TEST_DB, 2).close()
+
+        helper.runMigrationsAndValidate(TEST_DB, 3, true, MIGRATION_2_3).use { db ->
+            db.query("SELECT COUNT(*) FROM drive_sync").use { cursor ->
+                cursor.moveToFirst()
+                // Empty is the truth, not a starting guess: before this version nothing had
+                // been uploaded, so claiming otherwise would make the first backup skip files.
+                assertThat(cursor.getInt(0)).isEqualTo(0)
+            }
+        }
+    }
+
+    /**
+     * The upgrade someone who installed the very first version will actually take. Running
+     * the migrations one at a time proves each works; running them in sequence proves they
+     * work after each other, which is the only path a real device follows.
+     */
+    @Test
+    fun `migrating all the way from 1 to 3 keeps the documents`() {
+        helper.createDatabase(TEST_DB, 1).use { db ->
+            db.insertV1Document(title = "Tax return 2025", fileName = "Tax_return_2025.pdf", createdAt = 1_000L)
+        }
+
+        helper.runMigrationsAndValidate(TEST_DB, 3, true, MIGRATION_1_2, MIGRATION_2_3).use { db ->
+            db.query("SELECT title, uuid FROM documents").use { cursor ->
+                assertThat(cursor.count).isEqualTo(1)
+                cursor.moveToFirst()
+                assertThat(cursor.getString(0)).isEqualTo("Tax return 2025")
+                assertThat(cursor.getString(1)).matches("[0-9a-f]{32}")
+            }
+        }
+    }
+
     private companion object {
         const val TEST_DB = "migration-test.db"
 

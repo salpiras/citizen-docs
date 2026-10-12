@@ -12,4 +12,8 @@ internal abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindsDocumentsRepository(impl: OfflineFirstDocumentsRepository): DocumentsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsDriveBackupRepository(impl: OfflineFirstDriveBackupRepository): DriveBackupRepository
 }

@@ -34,6 +34,17 @@ interface DocumentDao {
     @Query("SELECT * FROM documents WHERE id = :id")
     suspend fun findById(id: Long): DocumentEntity?
 
+    /** How a restore decides whether it already holds a document. */
+    @Query("SELECT * FROM documents WHERE uuid = :uuid")
+    suspend fun findByUuid(uuid: String): DocumentEntity?
+
+    /**
+     * A snapshot rather than a Flow. A backup walks the library once and should work from a
+     * list that cannot change underneath it half way through.
+     */
+    @Query("SELECT * FROM documents ORDER BY document_date DESC, id DESC")
+    suspend fun all(): List<DocumentEntity>
+
     // ABORT, not IGNORE: a failed insert must surface so the repository can roll the file back.
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(entity: DocumentEntity): Long
