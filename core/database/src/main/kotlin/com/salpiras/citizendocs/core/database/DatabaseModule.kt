@@ -24,7 +24,8 @@ internal object DatabaseModule {
             context = context,
             klass = CitizenDocsDatabase::class.java,
             name = CitizenDocsDatabase.NAME,
-        ).build()
+        ).addMigrations(*ALL_MIGRATIONS)
+        .build()
 
     @Provides
     fun providesDocumentDao(database: CitizenDocsDatabase): DocumentDao = database.documentDao()

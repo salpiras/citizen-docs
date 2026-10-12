@@ -19,7 +19,8 @@ abstract class CitizenDocsDatabase : RoomDatabase() {
     abstract fun documentDao(): DocumentDao
 
     companion object {
-        const val VERSION = 1
+        /** 2 added `uuid` and `updated_at`. See [MIGRATION_1_2]. */
+        const val VERSION = 2
         const val NAME = "citizen-docs.db"
     }
 }

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlin.time.Instant
 
 /**
  * A DAO that keeps rows in memory but preserves the two behaviours the repository depends
@@ -38,7 +39,8 @@ class FakeDocumentDao : DocumentDao {
         return id
     }
 
-    override suspend fun updateTitle(id: Long, title: String): Int = update(id) { it.copy(title = title) }
+    override suspend fun updateTitle(id: Long, title: String, updatedAt: Instant): Int =
+        update(id) { it.copy(title = title, updatedAt = updatedAt) }
 
     override suspend fun updateFileName(id: Long, fileName: String): Int = update(id) { it.copy(fileName = fileName) }
 

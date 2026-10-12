@@ -38,6 +38,7 @@ include(":core:scanner")
 include(":core:data")
 include(":core:domain")
 include(":core:designsystem")
+include(":core:drive")
 include(":core:ui")
 include(":core:testing")
 

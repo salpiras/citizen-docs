@@ -7,6 +7,7 @@ import com.salpiras.citizendocs.core.database.DocumentEntity
 import com.salpiras.citizendocs.core.database.asExternalModel
 import com.salpiras.citizendocs.core.model.Document
 import com.salpiras.citizendocs.core.model.DocumentId
+import com.salpiras.citizendocs.core.model.newDocumentUuid
 import com.salpiras.citizendocs.core.model.slugify
 import com.salpiras.citizendocs.core.storage.ArchiveEntry
 import com.salpiras.citizendocs.core.storage.DocumentArchiver
@@ -46,12 +47,18 @@ constructor(
     override suspend fun add(draft: DocumentDraft): DocumentId = withContext(io) {
         val fileName = fileStore.persist(draft.sourceUri, slugify(draft.title))
         try {
+            // A brand new document has never been edited, so it is created and updated at
+            // the same instant. One read of the clock, not two, or the two would disagree
+            // by however long the insert took.
+            val now = clock.now()
             val rowId =
                 dao.insert(
                     DocumentEntity(
+                        uuid = newDocumentUuid(),
                         title = draft.title,
                         documentDate = draft.documentDate,
-                        createdAt = clock.now(),
+                        createdAt = now,
+                        updatedAt = now,
                         fileName = fileName,
                         pageCount = draft.pageCount,
                         sizeBytes = fileStore.sizeOf(fileName),
@@ -66,9 +73,11 @@ constructor(
 
     override suspend fun rename(id: DocumentId, title: String): Unit = withContext(io) {
         val entity = dao.findById(id.value) ?: return@withContext
-        dao.updateTitle(id.value, title)
+        dao.updateTitle(id.value, title, clock.now())
         // Keep the file name in step with the title so the on-disk store stays browsable.
         val newFileName = fileStore.rename(entity.fileName, slugify(title))
+        // Deliberately does not touch updated_at: the file name is a consequence of the
+        // title change that already stamped it, not a second edit by the user.
         if (newFileName != entity.fileName) dao.updateFileName(id.value, newFileName)
     }
 

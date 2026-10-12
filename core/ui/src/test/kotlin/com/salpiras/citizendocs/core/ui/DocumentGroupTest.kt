@@ -10,15 +10,20 @@ import kotlin.time.Instant
 class DocumentGroupTest {
     private var nextId = 1L
 
-    private fun document(date: LocalDate, title: String = "Document") = Document(
-        id = DocumentId(nextId++),
-        title = title,
-        documentDate = date,
-        createdAt = Instant.parse("2026-01-12T09:30:00Z"),
-        fileName = "$title.pdf",
-        pageCount = 1,
-        sizeBytes = 1_024,
-    )
+    private fun document(date: LocalDate, title: String = "Document"): Document {
+        val id = nextId++
+        return Document(
+            id = DocumentId(id),
+            uuid = "%032d".format(id),
+            title = title,
+            documentDate = date,
+            createdAt = Instant.parse("2026-01-12T09:30:00Z"),
+            updatedAt = Instant.parse("2026-01-12T09:30:00Z"),
+            fileName = "$title.pdf",
+            pageCount = 1,
+            sizeBytes = 1_024,
+        )
+    }
 
     @Test
     fun `an empty list produces no groups`() {
